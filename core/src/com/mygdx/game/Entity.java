@@ -15,5 +15,6 @@ public class Entity {
 
     void move(){
         x += vx;
+
     }
 }
