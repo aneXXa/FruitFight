@@ -15,6 +15,7 @@ public class FruitFightMain extends Game {
 	ScreenMainMenu screenMainMenu;
 	ScreenGame screenGame;
 	ScreenOptions screenOptions;
+	ScreenPause screenPause;
 	
 	@Override
 	public void create () {
@@ -26,6 +27,7 @@ public class FruitFightMain extends Game {
 		screenMainMenu = new ScreenMainMenu(this);
 		screenGame = new ScreenGame(this);
 		screenOptions = new ScreenOptions(this);
+		screenPause = new ScreenPause(this);
 
 		setScreen(screenMainMenu);
 	}

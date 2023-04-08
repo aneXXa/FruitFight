@@ -26,7 +26,7 @@ public class ScreenMainMenu implements Screen {
         btnPlay = new ImgButton(imgBtnPlay, 912, 516, 224, 104);
         btnOptions = new ImgButton(imgBtnOptions, 836, 388, 372, 104);
         btnAbout = new ImgButton(imgBtnAbout, 884, 260, 276, 104);
-        btnQuit = new ImgButton(imgBtnQuit, 908,132, 228, 104);
+        btnQuit = new ImgButton(imgBtnQuit, 908, 132, 228, 104);
     }
 
     @Override

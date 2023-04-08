@@ -10,16 +10,25 @@ import com.badlogic.gdx.graphics.Texture;
 public class ScreenGame implements Screen {
     FruitFightMain f;
     Texture bgGame;
-    Texture imgBtnPause;
+    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack;
+    Texture imgPlayer;
 
-    ImgButton btnPause;
+    ImgButton btnPause, btnMoveL, btnMoveR, btnAttack;
 
 
     public ScreenGame(FruitFightMain context){
         f = context;
+
         bgGame = new Texture("bgIntro.png");
         imgBtnPause = new Texture("btnPause.png");
+        imgBtnMoveL = new Texture("btnMoveL.png");
+        imgBtnMoveR = new Texture("btnMoveR.png");
+        imgBtnAttack = new Texture("btnAttack.png");
+
         btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 80, 80);
+        btnMoveL = new ImgButton(imgBtnMoveL, 50, 50, 100, 100);
+        btnMoveR = new ImgButton(imgBtnMoveR, 250, 50, 100, 100);
+        btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 150, 150);
     }
 
     @Override
@@ -33,6 +42,9 @@ public class ScreenGame implements Screen {
         if(Gdx.input.justTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
+            if(btnPause.hit(f.touch.x, f.touch.y)){
+                f.setScreen(f.screenPause);
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             f.setScreen(f.screenMainMenu);
@@ -43,7 +55,10 @@ public class ScreenGame implements Screen {
         f.batch.setProjectionMatrix(f.camera.combined);
         f.batch.begin();
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        f.batch.draw(imgBtnPause, btnPause.x, btnPause.y);
+        f.batch.draw(imgBtnPause, btnPause.x, btnPause.y, btnPause.width, btnPause.height);
+        f.batch.draw(imgBtnMoveL, btnMoveL.x, btnMoveL.y, btnMoveL.width, btnMoveL.height);
+        f.batch.draw(imgBtnMoveR, btnMoveR.x, btnMoveR.y, btnMoveR.width, btnMoveR.height);
+        f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
         f.batch.end();
     }
 
