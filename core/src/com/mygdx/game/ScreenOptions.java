@@ -20,7 +20,7 @@ public class ScreenOptions implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setCatchKey(Input.Keys.BACK, true);
     }
 
     @Override
@@ -29,6 +29,9 @@ public class ScreenOptions implements Screen {
         if(Gdx.input.justTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            f.setScreen(f.screenMainMenu);
         }
 
         //rendering graphics
@@ -56,7 +59,7 @@ public class ScreenOptions implements Screen {
 
     @Override
     public void hide() {
-
+        Gdx.input.setCatchKey(Input.Keys.BACK, false);
     }
 
     @Override

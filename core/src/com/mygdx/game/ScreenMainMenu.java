@@ -13,6 +13,7 @@ public class ScreenMainMenu implements Screen {
     Texture logo;
 
     ImgButton btnPlay, btnOptions, btnAbout, btnQuit;
+
     public ScreenMainMenu(FruitFightMain context){
         f = context;
         bgMainMenu = new Texture("bgIntro.png"); // background
@@ -86,6 +87,11 @@ public class ScreenMainMenu implements Screen {
 
     @Override
     public void dispose() {
-
+        bgMainMenu.dispose();
+        logo.dispose();
+        imgBtnPlay.dispose();
+        imgBtnOptions.dispose();
+        imgBtnAbout.dispose();
+        imgBtnQuit.dispose();
     }
 }
