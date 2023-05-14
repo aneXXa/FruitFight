@@ -67,16 +67,21 @@ public class ScreenGame implements Screen {
                 enemies.get(i).move();
             }
 
-            if(btnMoveL.hit(f.touch.x, f.touch.y)){
-                player.moveL();
+            if (Gdx.input.isTouched()) {
+                f.touch.set(Gdx.input.getX(), Gdx.input.getY(),0);
+                f.camera.unproject(f.touch);
+                if (btnMoveL.hit(f.touch.x, f.touch.y)) {
+                    player.moveL();
+                }
+                if (btnMoveR.hit(f.touch.x, f.touch.y)) {
+                    player.moveR();
+                }
+                if(btnAttack.hit(f.touch.x, f.touch.y)){
+                    player.killEnemy();
+                    //if ()
+                }
             }
-            if(btnMoveR.hit(f.touch.x, f.touch.y)){
-                player.moveR();
-            }
-            if(btnAttack.hit(f.touch.x, f.touch.y)){
-                player.killEnemy();
-                //if ()
-            }
+
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             f.setScreen(f.screenMainMenu);
@@ -89,7 +94,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
         for(Enemy enemy : enemies){
-            f.batch.draw(enemy.img, enemy.getX(), enemy.y, enemy.width, enemy.height);
+            f.batch.draw(enemy.img, enemy.getX(), enemy.getY());
         }
         f.batch.draw(imgPlayer, player.getX(), player.getY());
 

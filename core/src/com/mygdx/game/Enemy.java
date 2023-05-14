@@ -15,16 +15,16 @@ public class Enemy {
 
     public Enemy(Texture imgEnemyApple){
         img = imgEnemyApple;
-        x = MathUtils.random(width/2, SCR_WIDTH-width/2);
+        x = MathUtils.random(width/2+1, SCR_WIDTH-width/2-1);
         y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*1.5f);
-        width = 100;
-        height = 100;
+        width = 60;
+        height = 70;
         vy = MathUtils.random(-2f, -1f);
         vx = MathUtils.random(-1.8f, 1.8f);
     }
 
     void move(){
-        if (y>100){
+        if (y>200){
             y += vy;
         }else{
             x += vx;

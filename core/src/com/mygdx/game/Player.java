@@ -10,14 +10,9 @@ public class Player {
 
     public Player(){
         x = SCR_WIDTH/2;
-        y = 100;
-        width = 100;
-        height = 100;
-        vx = 1.5f;
-    }
-    void move() {
-        x += vx;
-        y += vy;
+        y = 200;
+        width = 60;
+        height = 70;
     }
 
     boolean outOfBounds() {
@@ -39,10 +34,12 @@ public class Player {
         return y-height/2;
     }
     void moveL(){
+        vx = 1.5f;
         x -= vx;
         outOfBounds();
     }
     void moveR(){
+        vx = 1.5f;
         x += vx;
         outOfBounds();
     }
