@@ -18,13 +18,13 @@ public class ScreenGame implements Screen {
     Texture imgPlayer;
 
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack;
-    ArrayList<Enemy> enemyApple= new ArrayList<>();
+    ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
 
     boolean gameOver;
 
     boolean pause = false;
-    long timeEnemyLastSpawn, timeEnemySpawnInterval = 5000;
+    long timeEnemyLastSpawn, timeEnemySpawnInterval = 1000;
 
     public ScreenGame(FruitFightMain context){
         f = context;
@@ -43,7 +43,7 @@ public class ScreenGame implements Screen {
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
         btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 150, 150);
 
-        player = new Player(imgPlayer, 0, 300);
+        player = new Player();
     }
 
     @Override
@@ -62,15 +62,20 @@ public class ScreenGame implements Screen {
             }
         }
         if(!pause){
-            spawnEnemy();
-            for (int i = enemyApple.size()-1; i >= 0; i--){
-                enemyApple.get(i).move();
+            spawnFruits();
+            for (int i = enemies.size()-1; i >= 0; i--){
+                enemies.get(i).move();
             }
+
             if(btnMoveL.hit(f.touch.x, f.touch.y)){
                 player.moveL();
             }
             if(btnMoveR.hit(f.touch.x, f.touch.y)){
                 player.moveR();
+            }
+            if(btnAttack.hit(f.touch.x, f.touch.y)){
+                player.killEnemy();
+                //if ()
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
@@ -83,10 +88,10 @@ public class ScreenGame implements Screen {
         f.batch.begin();
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
-        for(Enemy enemy: enemyApple){
-            f.batch.draw(imgEnemyApple, enemy.x, enemy.y, enemy.width, enemy.height);
+        for(Enemy enemy : enemies){
+            f.batch.draw(enemy.img, enemy.getX(), enemy.y, enemy.width, enemy.height);
         }
-        f.batch.draw(imgPlayer, player.x, player.y);
+        f.batch.draw(imgPlayer, player.getX(), player.getY());
 
         f.batch.draw(imgBtnPause, btnPause.x, btnPause.y, btnPause.width, btnPause.height);
         f.batch.draw(imgBtnMoveL, btnMoveL.x, btnMoveL.y, btnMoveL.width, btnMoveL.height);
@@ -128,9 +133,9 @@ public class ScreenGame implements Screen {
         imgBtnAttack.dispose();
     }
 
-    void spawnEnemy(){
+    void spawnFruits(){
         if(TimeUtils.millis() > timeEnemyLastSpawn+timeEnemySpawnInterval) {
-            enemyApple.add(new Enemy());
+            enemies.add(new Enemy(imgEnemyApple));
             timeEnemyLastSpawn = TimeUtils.millis();
         }
 
