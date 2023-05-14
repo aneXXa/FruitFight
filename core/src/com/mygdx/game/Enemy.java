@@ -3,6 +3,7 @@ package com.mygdx.game;
 import static com.mygdx.game.FruitFightMain.SCR_WIDTH;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 
 public class Enemy {
     float x, y;
@@ -10,11 +11,11 @@ public class Enemy {
     float vx;
     boolean isAlive;
 
-    public Enemy(Texture texture, float x, float y){
+    public Enemy(){
         width = height = 250;
-        x = this.x;
-        y = this.y;
-        vx = 0.8f;
+        x = MathUtils.random(width/2, SCR_WIDTH-width/2);
+        y = 100;
+        vx = 2f;
     }
 
     void move(){
@@ -23,7 +24,7 @@ public class Enemy {
     }
 
     void outOfBounds(){
-        if(x<0-width/2 || x> SCR_WIDTH-width/2) vx = -vx;
+        if(x<0 || x>SCR_WIDTH-width/2) vx = -vx;
     }
 
 }

@@ -6,6 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.TimeUtils;
+
+import java.util.ArrayList;
 
 public class ScreenGame implements Screen {
     FruitFightMain f;
@@ -15,10 +18,13 @@ public class ScreenGame implements Screen {
     Texture imgPlayer;
 
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack;
-    Enemy[] enemyApple = new Enemy[1];
+    ArrayList<Enemy> enemyApple= new ArrayList<>();
     Player player;
 
+    boolean gameOver;
+
     boolean pause = false;
+    long timeEnemyLastSpawn, timeEnemySpawnInterval = 2000;
 
     public ScreenGame(FruitFightMain context){
         f = context;
@@ -37,9 +43,6 @@ public class ScreenGame implements Screen {
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
         btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 150, 150);
 
-        for (int i = 0; i < enemyApple.length; i++) {
-            enemyApple[i] = new Enemy(imgEnemyApple,0, 300);
-        }
         player = new Player(imgPlayer, 0, 300);
     }
 
@@ -51,7 +54,7 @@ public class ScreenGame implements Screen {
     @Override
     public void render(float delta) {
         // screen touch
-        if(Gdx.input.justTouched()) {
+        if(Gdx.input.isTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
             if(btnPause.hit(f.touch.x, f.touch.y)){
@@ -59,8 +62,9 @@ public class ScreenGame implements Screen {
             }
         }
         if(!pause){
-            for (int i = 0; i < enemyApple.length; i++) {
-                enemyApple[i].move();
+            spawnEnemy();
+            for (int i = enemyApple.size()-1; i >= 0; i--){
+                enemyApple.get(i).move();
             }
             if(btnMoveL.hit(f.touch.x, f.touch.y)){
                 player.moveL();
@@ -79,8 +83,8 @@ public class ScreenGame implements Screen {
         f.batch.begin();
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
-        for (int i = 0; i < enemyApple.length; i++) {
-            f.batch.draw(imgEnemyApple, enemyApple[i].x, enemyApple[i].y);
+        for(Enemy enemy: enemyApple){
+            f.batch.draw(imgEnemyApple, enemy.x, enemy.y, enemy.width, enemy.height);
         }
         f.batch.draw(imgPlayer, player.x, player.y);
 
@@ -122,5 +126,19 @@ public class ScreenGame implements Screen {
         imgBtnMoveL.dispose();
         imgBtnMoveR.dispose();
         imgBtnAttack.dispose();
+    }
+
+    void spawnEnemy(){
+        if(TimeUtils.millis() > timeEnemyLastSpawn+timeEnemySpawnInterval) {
+            enemyApple.add(new Enemy());
+            timeEnemyLastSpawn = TimeUtils.millis();
+        }
+
+    /*void newGame(){
+        enemyApple.clear();
+        gameOver = false;
+    }
+    void gameOver(){
+        gameOver = true;*/
     }
 }
