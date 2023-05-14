@@ -24,7 +24,7 @@ public class ScreenGame implements Screen {
     boolean gameOver;
 
     boolean pause = false;
-    long timeEnemyLastSpawn, timeEnemySpawnInterval = 2000;
+    long timeEnemyLastSpawn, timeEnemySpawnInterval = 5000;
 
     public ScreenGame(FruitFightMain context){
         f = context;
