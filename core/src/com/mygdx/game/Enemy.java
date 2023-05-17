@@ -13,12 +13,12 @@ public class Enemy {
     boolean isAlive;
     Texture img;
 
-    public Enemy(Texture imgEnemyApple){
-        img = imgEnemyApple;
-        x = MathUtils.random(width/2+1, SCR_WIDTH-width/2-1);
+    public Enemy(Texture imgEnemy){
+        img = imgEnemy;
+        width = img.getWidth();
+        height = img.getHeight();
+        x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);
         y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*1.5f);
-        width = 60;
-        height = 70;
         vy = MathUtils.random(-2f, -1f);
         vx = MathUtils.random(-1.8f, 1.8f);
     }

@@ -9,10 +9,10 @@ public class Player {
     int lives = 3;
 
     public Player(){
+        width = 208;
+        height = 212;
         x = SCR_WIDTH/2;
-        y = 200;
-        width = 60;
-        height = 70;
+        y = 258;
     }
 
     boolean outOfBounds() {

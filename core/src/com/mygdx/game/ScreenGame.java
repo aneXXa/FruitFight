@@ -14,7 +14,7 @@ public class ScreenGame implements Screen {
     FruitFightMain f;
     Texture bgGame;
     Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack;
-    Texture imgEnemyApple;
+    Texture imgEnemy;
     Texture imgPlayer;
 
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack;
@@ -35,13 +35,13 @@ public class ScreenGame implements Screen {
         imgBtnMoveR = new Texture("btnMoveR.png");
         imgBtnAttack = new Texture("btnAttack.png");
 
-        imgEnemyApple = new Texture("apple.png");
-        imgPlayer = new Texture("apple.png");
+        imgEnemy = new Texture("enemy.Fruit.1.1.png");
+        imgPlayer = new Texture("player.1.png");
 
         btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 80, 80);
         btnMoveL = new ImgButton(imgBtnMoveL, 50, 50, 100, 100);
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
-        btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 150, 150);
+        btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 100, 100);
 
         player = new Player();
     }
@@ -54,11 +54,15 @@ public class ScreenGame implements Screen {
     @Override
     public void render(float delta) {
         // screen touch
-        if(Gdx.input.isTouched()) {
+        if(Gdx.input.justTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
             if(btnPause.hit(f.touch.x, f.touch.y)){
                 pause = !pause;
+            }
+            if(btnAttack.hit(f.touch.x, f.touch.y)){
+                player.killEnemy();
+                //if ()
             }
         }
         if(!pause){
@@ -76,10 +80,7 @@ public class ScreenGame implements Screen {
                 if (btnMoveR.hit(f.touch.x, f.touch.y)) {
                     player.moveR();
                 }
-                if(btnAttack.hit(f.touch.x, f.touch.y)){
-                    player.killEnemy();
-                    //if ()
-                }
+
             }
 
         }
@@ -140,7 +141,7 @@ public class ScreenGame implements Screen {
 
     void spawnFruits(){
         if(TimeUtils.millis() > timeEnemyLastSpawn+timeEnemySpawnInterval) {
-            enemies.add(new Enemy(imgEnemyApple));
+            enemies.add(new Enemy(imgEnemy));
             timeEnemyLastSpawn = TimeUtils.millis();
         }
 
