@@ -11,12 +11,12 @@ public class Enemy {
     float width, height;
     float vx, vy;
     boolean isAlive;
-    Texture img;
+    Texture img1, img2 = new Texture("Enemy.Fruit.1.1.png");;
 
     public Enemy(Texture imgEnemy){
-        img = imgEnemy;
-        width = img.getWidth();
-        height = img.getHeight();
+        img1 = imgEnemy;
+        width = img2.getWidth();
+        height = img2.getHeight();
         x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);
         y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*1.5f);
         vy = MathUtils.random(-2f, -1f);
@@ -28,6 +28,7 @@ public class Enemy {
             y += vy;
         }else{
             x += vx;
+            img1 = img2;
         }
         if(outOfBounds()) vx=-vx;
     }

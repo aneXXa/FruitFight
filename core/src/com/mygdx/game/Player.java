@@ -5,7 +5,7 @@ import static com.mygdx.game.FruitFightMain.SCR_WIDTH;
 public class Player {
     float x, y;
     float width, height;
-    float vx, vy;
+    float vx;
     int lives = 3;
 
     public Player(){
@@ -18,11 +18,11 @@ public class Player {
     boolean outOfBounds() {
         if(x < width/2) {
             x = width/2;
-            vx = 0;
+
         }
         if(x > SCR_WIDTH-width/2){
             x = SCR_WIDTH-width/2;
-            vx = 0;
+
         }
         return true;
     }
@@ -34,12 +34,12 @@ public class Player {
         return y-height/2;
     }
     void moveL(){
-        vx = 1.5f;
+        vx = 1.8f;
         x -= vx;
         outOfBounds();
     }
     void moveR(){
-        vx = 1.5f;
+        vx = 1.8f;
         x += vx;
         outOfBounds();
     }

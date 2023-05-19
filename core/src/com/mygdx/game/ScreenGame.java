@@ -12,12 +12,12 @@ import java.util.ArrayList;
 
 public class ScreenGame implements Screen {
     FruitFightMain f;
-    Texture bgGame;
-    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack;
+    Texture bgGame, bgPause, Pause;
+    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
     Texture imgEnemy;
     Texture imgPlayer;
 
-    ImgButton btnPause, btnMoveL, btnMoveR, btnAttack;
+    ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
 
@@ -30,18 +30,27 @@ public class ScreenGame implements Screen {
         f = context;
 
         bgGame = new Texture("bgIntro.png");
+        bgPause = new Texture("pauseScreen.png");
+        Pause = new Texture("pause.png");
+
         imgBtnPause = new Texture("btnPause.png");
         imgBtnMoveL = new Texture("btnMoveL.png");
         imgBtnMoveR = new Texture("btnMoveR.png");
         imgBtnAttack = new Texture("btnAttack.png");
+        imgBtnResume = new Texture("btnResume.png");
+        imgBtnHome = new Texture("btnHome.png");
+        imgBtnRestart = new Texture("btnRestart.png");
 
-        imgEnemy = new Texture("enemy.Fruit.1.1.png");
+        imgEnemy = new Texture("Enemy.Fruit.1.0.png");
         imgPlayer = new Texture("player.1.png");
 
-        btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 80, 80);
+        btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 90, 90);
         btnMoveL = new ImgButton(imgBtnMoveL, 50, 50, 100, 100);
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
         btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 100, 100);
+        btnHome = new ImgButton(imgBtnHome, SCR_WIDTH/2-40, SCR_HEIGHT/2-60, 90, 90);
+        btnResume = new ImgButton(imgBtnResume, SCR_WIDTH/2+160, SCR_HEIGHT/2-60, 90, 90);
+        btnRestart = new ImgButton(imgBtnRestart, SCR_WIDTH/2-240, SCR_HEIGHT/2-60, 90, 90);
 
         player = new Player();
     }
@@ -53,18 +62,7 @@ public class ScreenGame implements Screen {
 
     @Override
     public void render(float delta) {
-        // screen touch
-        if(Gdx.input.justTouched()) {
-            f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            f.camera.unproject(f.touch);
-            if(btnPause.hit(f.touch.x, f.touch.y)){
-                pause = !pause;
-            }
-            if(btnAttack.hit(f.touch.x, f.touch.y)){
-                player.killEnemy();
-                //if ()
-            }
-        }
+
         if(!pause){
             spawnFruits();
             for (int i = enemies.size()-1; i >= 0; i--){
@@ -82,7 +80,33 @@ public class ScreenGame implements Screen {
                 }
 
             }
+            if(Gdx.input.justTouched()){
+                f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                f.camera.unproject(f.touch);
+                if(btnPause.hit(f.touch.x, f.touch.y)){
+                    pause = !pause;
+                }
+                if(btnAttack.hit(f.touch.x, f.touch.y)){
+                    player.killEnemy();
+                    //if ()
+                }
+            }
 
+        }
+        if(pause) {
+            if(Gdx.input.justTouched()){
+                f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+                f.camera.unproject(f.touch);
+                if(btnHome.hit(f.touch.x, f.touch.y)){
+                    f.setScreen(f.screenMainMenu);
+                }
+                if(btnResume.hit(f.touch.x, f.touch.y)){
+                    pause = !pause;
+                }
+                if(btnRestart.hit(f.touch.x, f.touch.y)){
+                    //newGame();
+                }
+            }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             f.setScreen(f.screenMainMenu);
@@ -95,7 +119,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
         for(Enemy enemy : enemies){
-            f.batch.draw(enemy.img, enemy.getX(), enemy.getY());
+            f.batch.draw(enemy.img1, enemy.getX(), enemy.getY());
         }
         f.batch.draw(imgPlayer, player.getX(), player.getY());
 
@@ -104,7 +128,11 @@ public class ScreenGame implements Screen {
         f.batch.draw(imgBtnMoveR, btnMoveR.x, btnMoveR.y, btnMoveR.width, btnMoveR.height);
         f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
         if(pause){
-            //
+            f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
+            f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight(), Pause.getWidth()+10, Pause.getHeight()+10);
+            f.batch.draw(imgBtnResume, btnResume.x, btnResume.y, btnResume.width, btnResume.height);
+            f.batch.draw(imgBtnHome, btnHome.x, btnHome.y, btnHome.width, btnHome.height);
+            f.batch.draw(imgBtnRestart, btnRestart.x, btnRestart.y, btnRestart.width, btnRestart.height);
         }
         f.batch.end();
     }
@@ -137,19 +165,22 @@ public class ScreenGame implements Screen {
         imgBtnMoveL.dispose();
         imgBtnMoveR.dispose();
         imgBtnAttack.dispose();
+        imgPlayer.dispose();
+        imgEnemy.dispose();
     }
 
-    void spawnFruits(){
-        if(TimeUtils.millis() > timeEnemyLastSpawn+timeEnemySpawnInterval) {
+    void spawnFruits() {
+        if (TimeUtils.millis() > timeEnemyLastSpawn + timeEnemySpawnInterval) {
             enemies.add(new Enemy(imgEnemy));
             timeEnemyLastSpawn = TimeUtils.millis();
         }
+    }
 
     /*void newGame(){
-        enemyApple.clear();
+        enemies.clear();
         gameOver = false;
     }
     void gameOver(){
-        gameOver = true;*/
-    }
+        gameOver = true;
+    }*/
 }

@@ -1,9 +1,13 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class FruitFightMain extends Game {
 	public static final int SCR_WIDTH = 1280, SCR_HEIGHT = 720;
@@ -15,6 +19,7 @@ public class FruitFightMain extends Game {
 	ScreenMainMenu screenMainMenu;
 	ScreenGame screenGame;
 	ScreenOptions screenOptions;
+
 	
 	@Override
 	public void create () {
