@@ -15,7 +15,7 @@ public class ScreenGame implements Screen {
     Texture bgGame, bgPause, Pause;
     Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
     Texture imgEnemy;
-    Texture imgPlayer;
+    Texture imgPlayer; //imgPlayerFront, imgPlayerSide;
 
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
     ArrayList<Enemy> enemies = new ArrayList<>();
@@ -42,15 +42,17 @@ public class ScreenGame implements Screen {
         imgBtnRestart = new Texture("btnRestart.png");
 
         imgEnemy = new Texture("Enemy.Fruit.1.0.png");
+        //imgPlayerFront = new Texture("player.1.png");
+        //imgPlayerSide = new Texture("player.2.png");
         imgPlayer = new Texture("player.1.png");
 
         btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 90, 90);
         btnMoveL = new ImgButton(imgBtnMoveL, 50, 50, 100, 100);
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
         btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 100, 100);
-        btnHome = new ImgButton(imgBtnHome, SCR_WIDTH/2-40, SCR_HEIGHT/2-60, 90, 90);
-        btnResume = new ImgButton(imgBtnResume, SCR_WIDTH/2+160, SCR_HEIGHT/2-60, 90, 90);
-        btnRestart = new ImgButton(imgBtnRestart, SCR_WIDTH/2-240, SCR_HEIGHT/2-60, 90, 90);
+        btnHome = new ImgButton(imgBtnHome, SCR_WIDTH/2-40, SCR_HEIGHT/2-90, 90, 90);
+        btnResume = new ImgButton(imgBtnResume, SCR_WIDTH/2+160, SCR_HEIGHT/2-90, 90, 90);
+        btnRestart = new ImgButton(imgBtnRestart, SCR_WIDTH/2-240, SCR_HEIGHT/2-90, 90, 90);
 
         player = new Player();
     }
@@ -129,7 +131,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
         if(pause){
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-            f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight(), Pause.getWidth()+10, Pause.getHeight()+10);
+            f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight()/2, Pause.getWidth()+10, Pause.getHeight()+10);
             f.batch.draw(imgBtnResume, btnResume.x, btnResume.y, btnResume.width, btnResume.height);
             f.batch.draw(imgBtnHome, btnHome.x, btnHome.y, btnHome.width, btnHome.height);
             f.batch.draw(imgBtnRestart, btnRestart.x, btnRestart.y, btnRestart.width, btnRestart.height);
@@ -165,7 +167,6 @@ public class ScreenGame implements Screen {
         imgBtnMoveL.dispose();
         imgBtnMoveR.dispose();
         imgBtnAttack.dispose();
-        imgPlayer.dispose();
         imgEnemy.dispose();
     }
 

@@ -8,6 +8,7 @@ public class Player {
     float vx;
     int lives = 3;
 
+
     public Player(){
         width = 208;
         height = 212;
