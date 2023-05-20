@@ -16,6 +16,7 @@ public class Enemy {
     int randomSprite;
     Texture[] EnemyFruit0 = new Texture[5];
     Texture[] EnemyFruit1= new Texture[5];
+    //
 
     public Enemy(){
         type = MathUtils.random(0,1);
