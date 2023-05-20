@@ -16,8 +16,6 @@ public class Enemy {
     int randomSprite;
     Texture[] EnemyFruit0 = new Texture[5];
     Texture[] EnemyFruit1= new Texture[5];
-    Texture[] EnemyVeggie0 = new Texture[5];
-    Texture[] EnemyVeggie1= new Texture[5];
     //
 
     public Enemy(){
@@ -29,20 +27,8 @@ public class Enemy {
         for (int i = 1; i < EnemyFruit0.length; i++) {
             EnemyFruit1[i] = new Texture("Enemy.Fruit."+i+".1.png");
         }
-        randomSprite = MathUtils.random(1, EnemyFruit0.length-1);
-        for (int i = 1; i < EnemyVeggie0.length; i++) {
-            EnemyVeggie0[i] = new Texture("Enemy.Veggie."+i+".0.png");
-        }
-        for (int i = 1; i < EnemyVeggie0.length; i++) {
-            EnemyVeggie1[i] = new Texture("Enemy.Veggie."+i+".1.png");
-        }
-        if (type == 0){
-            img0 = EnemyFruit0[randomSprite];
-            img1 = EnemyFruit1[randomSprite];
-        }else if(type==1){
-            img0 = EnemyVeggie0[randomSprite];
-            img1 = EnemyVeggie1[randomSprite];
-        }
+        img0 = EnemyFruit0[randomSprite];
+        img1 = EnemyFruit1[randomSprite];
         width = img0.getWidth();
         height = img0.getHeight();
         x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);
