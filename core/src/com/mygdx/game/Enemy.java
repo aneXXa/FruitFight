@@ -11,12 +11,25 @@ public class Enemy {
     float width, height;
     float vx, vy;
     boolean isAlive;
-    Texture img1, img2 = new Texture("Enemy.Fruit.1.1.png");;
+    Texture img0, img1;
+    int type;
+    int randomSprite;
+    Texture[] EnemyFruit0 = new Texture[5];
+    Texture[] EnemyFruit1= new Texture[5];
 
-    public Enemy(Texture imgEnemy){
-        img1 = imgEnemy;
-        width = img2.getWidth();
-        height = img2.getHeight();
+    public Enemy(){
+        type = MathUtils.random(0,1);
+        randomSprite = MathUtils.random(1, EnemyFruit0.length-1);
+        for (int i = 1; i < EnemyFruit0.length; i++) {
+            EnemyFruit0[i] = new Texture("Enemy.Fruit."+i+".0.png");
+        }
+        for (int i = 1; i < EnemyFruit0.length; i++) {
+            EnemyFruit0[i] = new Texture("Enemy.Fruit."+i+".1.png");
+        }
+        img0 = EnemyFruit0[randomSprite];
+        img1 = EnemyFruit1[randomSprite];
+        width = img0.getWidth();
+        height = img0.getHeight();
         x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);
         y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*1.5f);
         vy = MathUtils.random(-2f, -1f);
@@ -28,7 +41,7 @@ public class Enemy {
             y += vy;
         }else{
             x += vx;
-            img1 = img2;
+            img0 = img1;
         }
         if(outOfBounds()) vx=-vx;
     }

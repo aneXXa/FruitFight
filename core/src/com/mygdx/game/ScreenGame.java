@@ -17,6 +17,12 @@ public class ScreenGame implements Screen {
     Texture imgEnemy;
     Texture imgPlayer; //imgPlayerFront, imgPlayerSide;
 
+    //Texture[] EnemyFruit;
+    //Texture[] EnemyVeggie;
+
+    //Texture randomSpriteFruit;
+    //Texture randomSpriteVeggie;
+
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
@@ -42,9 +48,19 @@ public class ScreenGame implements Screen {
         imgBtnRestart = new Texture("btnRestart.png");
 
         imgEnemy = new Texture("Enemy.Fruit.1.0.png");
-        //imgPlayerFront = new Texture("player.1.png");
-        //imgPlayerSide = new Texture("player.2.png");
         imgPlayer = new Texture("player.1.png");
+
+        /*for (int i = 1; i < EnemyFruit.length; i++) {
+            EnemyFruit[i] = new Texture("Enemy.Fruit."+i+".0.png");
+        }
+        for (int i = 1; i < EnemyVeggie.length; i++) {
+            EnemyVeggie[i] = new Texture("Enemy.Veggie."+i+".0.png");
+        }*/
+
+        /*int randomFruit = MathUtils.random(0, EnemyFruit.length - 1);
+        int randomVeggie = MathUtils.random(0, EnemyVeggie.length - 1);
+        Texture randomSpriteFruit = EnemyFruit[randomFruit];
+        Texture randomSpriteVeggie = EnemyVeggie[randomVeggie];*/
 
         btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 90, 90);
         btnMoveL = new ImgButton(imgBtnMoveL, 50, 50, 100, 100);
@@ -121,8 +137,9 @@ public class ScreenGame implements Screen {
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
         for(Enemy enemy : enemies){
-            f.batch.draw(enemy.img1, enemy.getX(), enemy.getY());
+            f.batch.draw(enemy.img0, enemy.getX(), enemy.getY());
         }
+
         f.batch.draw(imgPlayer, player.getX(), player.getY());
 
         f.batch.draw(imgBtnPause, btnPause.x, btnPause.y, btnPause.width, btnPause.height);
@@ -172,7 +189,7 @@ public class ScreenGame implements Screen {
 
     void spawnFruits() {
         if (TimeUtils.millis() > timeEnemyLastSpawn + timeEnemySpawnInterval) {
-            enemies.add(new Enemy(imgEnemy));
+            enemies.add(new Enemy());
             timeEnemyLastSpawn = TimeUtils.millis();
         }
     }
