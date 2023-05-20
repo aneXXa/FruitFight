@@ -15,7 +15,7 @@ public class ScreenGame implements Screen {
     Texture bgGame, bgPause, Pause;
     Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
     Texture imgEnemy;
-    Texture imgPlayer; //imgPlayerFront, imgPlayerSide;
+    Texture[] imgPlayer = new Texture[4]; //imgPlayerFront, imgPlayerSide;
 
     //Texture[] EnemyFruit;
     //Texture[] EnemyVeggie;
@@ -48,7 +48,9 @@ public class ScreenGame implements Screen {
         imgBtnRestart = new Texture("btnRestart.png");
 
         imgEnemy = new Texture("Enemy.Fruit.1.0.png");
-        imgPlayer = new Texture("player.1.png");
+        for (int i = 0; i < imgPlayer.length; i++) {
+            imgPlayer[i] = new Texture("player."+i+".png");
+        }
 
         /*for (int i = 1; i < EnemyFruit.length; i++) {
             EnemyFruit[i] = new Texture("Enemy.Fruit."+i+".0.png");
@@ -108,8 +110,10 @@ public class ScreenGame implements Screen {
                     player.killEnemy();
                     //if ()
                 }
+                if (btnMoveL.hit(f.touch.x, f.touch.y) || btnMoveR.hit(f.touch.x, f.touch.y)) {
+                    player.stay();
+                }
             }
-
         }
         if(pause) {
             if(Gdx.input.justTouched()){
@@ -140,7 +144,8 @@ public class ScreenGame implements Screen {
             f.batch.draw(enemy.img0, enemy.getX(), enemy.getY());
         }
 
-        f.batch.draw(imgPlayer, player.getX(), player.getY());
+        f.batch.draw(imgPlayer[player.faza], player.getX(), player.getY(), player.width, player.height,
+                0, 0, 208, 212, player.direction, false);
 
         f.batch.draw(imgBtnPause, btnPause.x, btnPause.y, btnPause.width, btnPause.height);
         f.batch.draw(imgBtnMoveL, btnMoveL.x, btnMoveL.y, btnMoveL.width, btnMoveL.height);
@@ -179,7 +184,10 @@ public class ScreenGame implements Screen {
     @Override
     public void dispose() {
         bgGame.dispose();
-        imgPlayer.dispose();
+        for (int i = 0; i < imgPlayer.length; i++) {
+            imgPlayer[i].dispose();
+        }
+
         imgBtnPause.dispose();
         imgBtnMoveL.dispose();
         imgBtnMoveR.dispose();

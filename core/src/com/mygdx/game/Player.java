@@ -7,7 +7,11 @@ public class Player {
     float width, height;
     float vx;
     int lives = 3;
-
+    public static final boolean RIGHT = false, LEFT = true;
+    boolean direction = RIGHT;
+    int faza;
+    public static final int STAY = 0, GO = 1, CHOP = 2;
+    int state = STAY;
 
     public Player(){
         width = 208;
@@ -37,14 +41,21 @@ public class Player {
     void moveL(){
         vx = 1.8f;
         x -= vx;
+        direction = LEFT;
+        faza = 1;
         outOfBounds();
     }
     void moveR(){
         vx = 1.8f;
         x += vx;
+        direction = RIGHT;
+        faza = 1;
         outOfBounds();
     }
 
+    void stay() {
+        faza = 0;
+    }
     void killEnemy(){
 
     }
