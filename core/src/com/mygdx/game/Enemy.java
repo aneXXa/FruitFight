@@ -25,7 +25,7 @@ public class Enemy {
             EnemyFruit0[i] = new Texture("Enemy.Fruit."+i+".0.png");
         }
         for (int i = 1; i < EnemyFruit0.length; i++) {
-            EnemyFruit0[i] = new Texture("Enemy.Fruit."+i+".1.png");
+            EnemyFruit1[i] = new Texture("Enemy.Fruit."+i+".1.png");
         }
         img0 = EnemyFruit0[randomSprite];
         img1 = EnemyFruit1[randomSprite];
