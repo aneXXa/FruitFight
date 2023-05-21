@@ -45,7 +45,7 @@ public class Enemy {
 
         }
         width = img0.getWidth();
-        height = img0.getHeight();
+        height = 132;
         x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);
         y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*1.5f);
         vy = MathUtils.random(-2f, -1f);
@@ -53,7 +53,7 @@ public class Enemy {
     }
 
     void move(){
-        if (y>200){
+        if (y>224){
             y += vy;
         }else{
             x += vx;

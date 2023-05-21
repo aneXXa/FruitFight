@@ -17,7 +17,7 @@ public class Player {
         width = 208;
         height = 212;
         x = SCR_WIDTH/2;
-        y = 258;
+        y = 262;
 
     }
 
