@@ -1,7 +1,6 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.FruitFightMain.SCR_HEIGHT;
-import static com.mygdx.game.FruitFightMain.SCR_WIDTH;
+import static com.mygdx.game.FruitFightMain.*;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,42 +11,29 @@ public class Enemy {
     float vx, vy;
     boolean isAlive;
     Texture img0, img1;
+    public static final int FRUIT = 0, VEGGIE = 1;
     int type;
     int randomSprite;
-    Texture[] EnemyFruit0 = new Texture[5];
-    Texture[] EnemyFruit1= new Texture[5];
-    Texture[] EnemyVeggie0 = new Texture[5];
-    Texture[] EnemyVeggie1= new Texture[5];
-    //
+    Texture[] imgs = new Texture[2];
+    Texture img;
 
-    public Enemy(){
-        type = MathUtils.random(0,1);
-        randomSprite = MathUtils.random(1, EnemyFruit0.length-1);
+    public Enemy(Texture[] imgFruits, Texture[] imgVeggies){
+        type = MathUtils.random(0, 1);
+        if(type == FRUIT) {
+            int nPic = MathUtils.random(0, imgFruits.length/2-1) * 2;
+            this.imgs[0] = imgFruits[nPic];
+            this.imgs[1] = imgFruits[nPic + 1];
+        } else {
+            int nPic = MathUtils.random(0, imgVeggies.length/2-1) * 2;
+            this.imgs[0] = imgVeggies[nPic];
+            this.imgs[1] = imgVeggies[nPic + 1];
+        }
+        img = this.imgs[0];
+        System.out.println(this.imgs[0]);
 
-        for (int i = 1; i < EnemyFruit0.length; i++) {
-            EnemyFruit0[i] = new Texture("Enemy.Fruit."+i+".0.png");
-        }
-        for (int i = 1; i < EnemyFruit0.length; i++) {
-            EnemyFruit1[i] = new Texture("Enemy.Fruit."+i+".1.png");
-        }
-        randomSprite = MathUtils.random(1, EnemyFruit0.length-1);
-        for (int i = 1; i < EnemyVeggie0.length; i++) {
-            EnemyVeggie0[i] = new Texture("Enemy.Veggie."+i+".0.png");
-        }
-        for (int i = 1; i < EnemyVeggie0.length; i++) {
-            EnemyVeggie1[i] = new Texture("Enemy.Veggie."+i+".1.png");
-        }
-        if (type == 0){
-            img0 = EnemyFruit0[randomSprite];
-            img1 = EnemyFruit1[randomSprite];
-        }else if(type==1){
-            img0 = EnemyVeggie0[randomSprite];
-            img1 = EnemyVeggie1[randomSprite];
 
-        }
-
-        width = img0.getWidth();
-        height = 132;
+        width = img.getWidth();
+        height = img.getHeight();
         x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);
         y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*1.5f);
         vy = MathUtils.random(-2f, -1f);
@@ -55,11 +41,11 @@ public class Enemy {
     }
 
     void move(){
-        if (y>224){
+        if (y>GROUND+1){
             y += vy;
         }else{
             x += vx;
-            img0 = img1;
+            img = imgs[1];
         }
         if(outOfBounds()) vx=-vx;
     }
@@ -68,7 +54,7 @@ public class Enemy {
     }
 
     public float getY() {
-        return y-height/2;
+        return y;
     }
 
     boolean outOfBounds(){

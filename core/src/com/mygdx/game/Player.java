@@ -1,6 +1,8 @@
 package com.mygdx.game;
 
-import static com.mygdx.game.FruitFightMain.SCR_WIDTH;
+import static com.mygdx.game.FruitFightMain.*;
+
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player {
     float x, y;
@@ -12,23 +14,23 @@ public class Player {
     int faza;
     public static final int STAY = 0, GO = 1, CHOP = 2;
     int state = STAY;
+    boolean isChop;
+    long timeNewFaza, timeFazaInterval = 100;
 
     public Player(){
         width = 208;
         height = 212;
         x = SCR_WIDTH/2;
-        y = 262;
+        y = GROUND;
 
     }
 
     boolean outOfBounds() {
         if(x < width/2) {
             x = width/2;
-
         }
         if(x > SCR_WIDTH-width/2){
             x = SCR_WIDTH-width/2;
-
         }
         return true;
     }
@@ -37,7 +39,7 @@ public class Player {
     }
 
     public float getY() {
-        return y-height/2;
+        return y;
     }
     void moveL(){
         vx = 1.8f;
@@ -54,13 +56,28 @@ public class Player {
         outOfBounds();
     }
 
+    void chop(){
+        if(timeNewFaza+timeFazaInterval < TimeUtils.millis()) {
+            faza++;
+            if (faza == 5) {
+                faza = 1;
+                isChop = false;
+            }
+            timeNewFaza = TimeUtils.millis();
+        }
+    }
+
     void stay() {
         //state=STAY;
         faza = 0;
     }
 
     boolean overlap(Enemy enemy){
-        return Math.abs(x-enemy.x) < width/2 + enemy.width/2 & Math.abs(y-enemy.y) < height/2 + enemy.height/2;
+        if(direction == LEFT) {
+            return x - enemy.x < width / 2 + enemy.width / 2 & enemy.y == 224;
+        } else {
+            return enemy.x - x < width / 2 + enemy.width / 2 & Math.abs(y - enemy.y) < height / 2 + enemy.height / 2;
+        }
     }
 
 }

@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class FruitFightMain extends Game {
 	public static final int SCR_WIDTH = 1280, SCR_HEIGHT = 720;
+	public static final int GROUND = 156;
 
 	SpriteBatch batch;
 	OrthographicCamera camera;

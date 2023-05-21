@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ public class ScreenGame implements Screen {
     FruitFightMain f;
     Texture bgGame, bgPause, Pause;
     Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
-    Texture imgEnemy;
-    Texture[] imgPlayer = new Texture[4];
+    Texture[] imgEnemyFruit = new Texture[8];
+    Texture[] imgEnemyVeggie = new Texture[8];
+    Texture[] imgPlayer = new Texture[5];
 
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
     ArrayList<Enemy> enemies = new ArrayList<>();
@@ -43,9 +45,15 @@ public class ScreenGame implements Screen {
         imgBtnHome = new Texture("btnHome.png");
         imgBtnRestart = new Texture("btnRestart.png");
 
-        imgEnemy = new Texture("Enemy.Fruit.1.0.png");
         for (int i = 0; i < imgPlayer.length; i++) {
             imgPlayer[i] = new Texture("player."+i+".png");
+        }
+
+        for (int i = 0; i < imgEnemyFruit.length; i++) {
+            imgEnemyFruit[i] = new Texture("Enemy.Fruit."+(i/2+1)+"."+i%2+".png");
+        }
+        for (int i = 0; i < imgEnemyVeggie.length; i++) {
+            imgEnemyVeggie[i] = new Texture("Enemy.Veggie."+(i/2+1)+"."+i%2+".png");
         }
 
         btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 90, 90);
@@ -66,48 +74,23 @@ public class ScreenGame implements Screen {
 
     @Override
     public void render(float delta) {
-
-        if(!pause){
-            spawnFruits();
-            for (int i = enemies.size()-1; i >= 0; i--){
-                enemies.get(i).move();
-            }
-
-            if (Gdx.input.isTouched()) {
-                f.touch.set(Gdx.input.getX(), Gdx.input.getY(),0);
-                f.camera.unproject(f.touch);
+        // touches
+        if (Gdx.input.isTouched()) {
+            f.touch.set(Gdx.input.getX(), Gdx.input.getY(),0);
+            f.camera.unproject(f.touch);
+            if(!pause && !player.isChop) {
                 if (btnMoveL.hit(f.touch.x, f.touch.y)) {
                     player.moveL();
                 }
                 if (btnMoveR.hit(f.touch.x, f.touch.y)) {
                     player.moveR();
                 }
-
-            }
-            if(Gdx.input.justTouched()){
-                f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                f.camera.unproject(f.touch);
-                if(btnPause.hit(f.touch.x, f.touch.y)){
-                    pause = !pause;
-                }
-                if(btnAttack.hit(f.touch.x, f.touch.y)){
-                    for (int i = enemies.size()-1; i >= 0 ; i--) {
-                        if(player.overlap(enemies.get(i))){
-                            enemies.remove(i);
-                            combo ++;
-                        }
-                    }
-
-                }
-                if (!btnMoveL.hit(f.touch.x, f.touch.y) || !btnMoveR.hit(f.touch.x, f.touch.y)) {
-                    player.stay();
-                }
             }
         }
-        if(pause) {
-            if(Gdx.input.justTouched()){
-                f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-                f.camera.unproject(f.touch);
+        if(Gdx.input.justTouched()){
+            f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            f.camera.unproject(f.touch);
+            if(pause){
                 if(btnHome.hit(f.touch.x, f.touch.y)){
                     f.setScreen(f.screenMainMenu);
                 }
@@ -117,6 +100,36 @@ public class ScreenGame implements Screen {
                 if(btnRestart.hit(f.touch.x, f.touch.y)){
                     //newGame();
                 }
+            }
+            else {
+                if(btnPause.hit(f.touch.x, f.touch.y)){
+                    pause = !pause;
+                }
+                if(btnAttack.hit(f.touch.x, f.touch.y)){
+                    player.isChop = true;
+                    for (int i = enemies.size()-1; i >= 0 ; i--) {
+                        if(player.overlap(enemies.get(i))){
+                            enemies.remove(i);
+                            combo ++;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!btnMoveL.hit(f.touch.x, f.touch.y) && !btnMoveR.hit(f.touch.x, f.touch.y) &&
+                    !player.isChop) {
+                player.stay();
+            }
+        }
+
+        // events
+        if(!pause){
+            spawnFruits();
+            for (int i = enemies.size()-1; i >= 0; i--){
+                enemies.get(i).move();
+            }
+            if(player.isChop){
+                player.chop();
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
@@ -130,7 +143,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
         for(Enemy enemy : enemies){
-            f.batch.draw(enemy.img0, enemy.getX(), enemy.getY());
+            f.batch.draw(enemy.img, enemy.getX(), enemy.getY(), enemy.width, enemy.height);
         }
 
         f.batch.draw(imgPlayer[player.faza], player.getX(), player.getY(), player.width, player.height,
@@ -182,12 +195,17 @@ public class ScreenGame implements Screen {
         imgBtnMoveL.dispose();
         imgBtnMoveR.dispose();
         imgBtnAttack.dispose();
-        imgEnemy.dispose();
+        for (int i = 0; i < imgEnemyFruit.length; i++) {
+            imgEnemyFruit[i].dispose();
+        }
+        for (int i = 0; i < imgEnemyVeggie.length; i++) {
+            imgEnemyVeggie[i].dispose();
+        }
     }
 
     void spawnFruits() {
         if (TimeUtils.millis() > timeEnemyLastSpawn + timeEnemySpawnInterval) {
-            enemies.add(new Enemy());
+            enemies.add(new Enemy(imgEnemyFruit, imgEnemyVeggie));
             timeEnemyLastSpawn = TimeUtils.millis();
         }
     }
