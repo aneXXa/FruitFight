@@ -15,13 +15,7 @@ public class ScreenGame implements Screen {
     Texture bgGame, bgPause, Pause;
     Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
     Texture imgEnemy;
-    Texture[] imgPlayer = new Texture[4]; //imgPlayerFront, imgPlayerSide;
-
-    //Texture[] EnemyFruit;
-    //Texture[] EnemyVeggie;
-
-    //Texture randomSpriteFruit;
-    //Texture randomSpriteVeggie;
+    Texture[] imgPlayer = new Texture[4];
 
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
     ArrayList<Enemy> enemies = new ArrayList<>();
