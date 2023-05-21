@@ -13,23 +13,31 @@ import java.util.ArrayList;
 
 public class ScreenGame implements Screen {
     FruitFightMain f;
-    Texture bgGame, bgPause, Pause;
+    Texture bgGame, bgPause;
+    Texture Pause;
     Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
+
     Texture[] imgEnemyFruit = new Texture[8];
     Texture[] imgEnemyVeggie = new Texture[8];
     Texture[] imgPlayer = new Texture[5];
 
     String comboString = "Combo: ";
+    String[] words = {"Fruit", "Veggie"};
+    String currentWord;
 
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
+
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
 
-    boolean gameOver;
-
     int combo = 0;
+    int index;
+    public static final int GENERATE_WORD = 0,PLAY_GAME = 1;
+    int condition = GENERATE_WORD;
 
     boolean pause = false;
+    boolean gameOver;
+
     long timeEnemyLastSpawn, timeEnemySpawnInterval = 2000;
 
     public ScreenGame(FruitFightMain context){
@@ -109,15 +117,6 @@ public class ScreenGame implements Screen {
                 }
                 if(btnAttack.hit(f.touch.x, f.touch.y)){
                     player.isChop = true;
-                    for (int i = enemies.size()-1; i >= 0 ; i--) {
-                        if(player.overlap(enemies.get(i))){
-                            if(player.faza == 1) {
-                                enemies.remove(i);
-                                combo++;
-                                break;
-                            }
-                        }
-                    }
                 }
             }
             if (!btnMoveL.hit(f.touch.x, f.touch.y) && !btnMoveR.hit(f.touch.x, f.touch.y) &&
@@ -128,12 +127,30 @@ public class ScreenGame implements Screen {
 
         // events
         if(!pause){
+            if(condition == GENERATE_WORD) {
+                newRound();
+            }
             spawnFruits();
             for (int i = enemies.size()-1; i >= 0; i--){
                 enemies.get(i).move();
             }
             if(player.isChop){
                 player.chop();
+            }
+            for (int i = enemies.size()-1; i >= 0 ; i--) {
+                if((player.overlap(enemies.get(i)) && player.isChop) == true && enemies.get(i).type == index){
+                    combo++;
+                    condition = GENERATE_WORD;
+                    enemies.remove(i);
+                    break;
+                } else if((player.overlap(enemies.get(i)) && player.isChop) == true && enemies.get(i).type != index){
+                    combo = 0;
+                    player.lives--;
+                    condition = GENERATE_WORD;
+                    System.out.print("lives: " + player.lives);
+                    enemies.remove(i);
+                    break;
+                }
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
@@ -158,6 +175,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(imgBtnMoveR, btnMoveR.x, btnMoveR.y, btnMoveR.width, btnMoveR.height);
         f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
         f.font.draw(f.batch, comboString+combo, 10, SCR_HEIGHT-25);
+        f.font.draw(f.batch, currentWord, SCR_WIDTH/2-100, SCR_HEIGHT-25);
         if(pause){
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
             f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight()/2, Pause.getWidth()+10, Pause.getHeight()+10);
@@ -214,11 +232,12 @@ public class ScreenGame implements Screen {
         }
     }
 
-    /*void newGame(){
-        enemies.clear();
-        gameOver = false;
+    void newRound(){
+        index = MathUtils.random.nextInt(words.length);
+        currentWord = words[index];
+        condition = PLAY_GAME;
     }
     void gameOver(){
         gameOver = true;
-    }*/
+    }
 }

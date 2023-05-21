@@ -80,6 +80,7 @@ public class Player {
             return enemy.x - x < width/2 && enemy.y<=GROUND;
         }
         return false;*/
+
         return Math.abs(x-enemy.x) < width/2 + enemy.width/4  && enemy.y <= GROUND;
         // сейчас работает в обе стороны без директиона
         // оверлеп работает только так, возможно что-то не то с direction
