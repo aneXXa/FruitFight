@@ -58,8 +58,9 @@ public class Player {
         //state=STAY;
         faza = 0;
     }
-    void killEnemy(){
 
+    boolean overlap(Enemy enemy){
+        return Math.abs(x-enemy.x) < width/2 + enemy.width/2 & Math.abs(y-enemy.y) < height/2 + enemy.height/2;
     }
 
 }

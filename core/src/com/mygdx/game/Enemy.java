@@ -23,6 +23,7 @@ public class Enemy {
     public Enemy(){
         type = MathUtils.random(0,1);
         randomSprite = MathUtils.random(1, EnemyFruit0.length-1);
+
         for (int i = 1; i < EnemyFruit0.length; i++) {
             EnemyFruit0[i] = new Texture("Enemy.Fruit."+i+".0.png");
         }
@@ -44,6 +45,7 @@ public class Enemy {
             img1 = EnemyVeggie1[randomSprite];
 
         }
+
         width = img0.getWidth();
         height = 132;
         x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);

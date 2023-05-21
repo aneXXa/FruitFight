@@ -23,6 +23,8 @@ public class ScreenGame implements Screen {
 
     boolean gameOver;
 
+    int combo = 0;
+
     boolean pause = false;
     long timeEnemyLastSpawn, timeEnemySpawnInterval = 2000;
 
@@ -89,8 +91,13 @@ public class ScreenGame implements Screen {
                     pause = !pause;
                 }
                 if(btnAttack.hit(f.touch.x, f.touch.y)){
-                    player.killEnemy();
-                    //if ()
+                    for (int i = enemies.size()-1; i >= 0 ; i--) {
+                        if(player.overlap(enemies.get(i))){
+                            enemies.remove(i);
+                            combo ++;
+                        }
+                    }
+
                 }
                 if (!btnMoveL.hit(f.touch.x, f.touch.y) || !btnMoveR.hit(f.touch.x, f.touch.y)) {
                     player.stay();
@@ -133,6 +140,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(imgBtnMoveL, btnMoveL.x, btnMoveL.y, btnMoveL.width, btnMoveL.height);
         f.batch.draw(imgBtnMoveR, btnMoveR.x, btnMoveR.y, btnMoveR.width, btnMoveR.height);
         f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
+        f.font.draw(f.batch, "COMBO: "+combo, 10, SCR_HEIGHT-10);
         if(pause){
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
             f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight()/2, Pause.getWidth()+10, Pause.getHeight()+10);
