@@ -143,7 +143,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(bgGame, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
         for(Enemy enemy : enemies){
-            f.batch.draw(enemy.img, enemy.getX(), enemy.getY(), enemy.width, enemy.height);
+            f.batch.draw(enemy.img, enemy.getX(), enemy.getY());
         }
 
         f.batch.draw(imgPlayer[player.faza], player.getX(), player.getY(), player.width, player.height,

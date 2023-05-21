@@ -74,9 +74,9 @@ public class Player {
 
     boolean overlap(Enemy enemy){
         if(direction == LEFT) {
-            return x - enemy.x < width / 2 + enemy.width / 2 & enemy.y == 224;
-        } else {
-            return enemy.x - x < width / 2 + enemy.width / 2 & Math.abs(y - enemy.y) < height / 2 + enemy.height / 2;
+            return x - enemy.x < width / 2  && enemy.y == GROUND;
+        } else{
+            return enemy.x - x < width / 2  && enemy.y == GROUND;
         }
     }
 
