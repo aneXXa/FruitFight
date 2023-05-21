@@ -11,25 +11,24 @@ public class Enemy {
     float vx, vy;
     boolean isAlive;
     Texture img0, img1;
+    Texture img;
     public static final int FRUIT = 0, VEGGIE = 1;
     int type;
     int randomSprite;
-    Texture[] imgs = new Texture[2];
-    Texture img;
+
 
     public Enemy(Texture[] imgFruits, Texture[] imgVeggies){
         type = MathUtils.random(0, 1);
         if(type == FRUIT) {
             int nPic = MathUtils.random(0, imgFruits.length/2-1) * 2;
-            this.imgs[0] = imgFruits[nPic];
-            this.imgs[1] = imgFruits[nPic + 1];
+            img0 = imgFruits[nPic];
+            img1 = imgFruits[nPic + 1];
         } else {
             int nPic = MathUtils.random(0, imgVeggies.length/2-1) * 2;
-            this.imgs[0] = imgVeggies[nPic];
-            this.imgs[1] = imgVeggies[nPic + 1];
+            img0 = imgVeggies[nPic];
+            img1 = imgVeggies[nPic + 1];
         }
-        img = this.imgs[0];
-        System.out.println(this.imgs[0]);
+        img = img0;
 
 
         width = img.getWidth();
@@ -45,7 +44,7 @@ public class Enemy {
             y += vy;
         }else{
             x += vx;
-            img = imgs[1];
+            img = img1;
         }
         if(outOfBounds()) vx=-vx;
     }
