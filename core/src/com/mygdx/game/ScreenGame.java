@@ -19,6 +19,8 @@ public class ScreenGame implements Screen {
     Texture[] imgEnemyVeggie = new Texture[8];
     Texture[] imgPlayer = new Texture[5];
 
+    String comboString = "Combo: ";
+
     ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
@@ -109,9 +111,11 @@ public class ScreenGame implements Screen {
                     player.isChop = true;
                     for (int i = enemies.size()-1; i >= 0 ; i--) {
                         if(player.overlap(enemies.get(i))){
-                            enemies.remove(i);
-                            combo ++;
-                            break;
+                            if(player.faza == 1) {
+                                enemies.remove(i);
+                                combo++;
+                                break;
+                            }
                         }
                     }
                 }
@@ -153,7 +157,7 @@ public class ScreenGame implements Screen {
         f.batch.draw(imgBtnMoveL, btnMoveL.x, btnMoveL.y, btnMoveL.width, btnMoveL.height);
         f.batch.draw(imgBtnMoveR, btnMoveR.x, btnMoveR.y, btnMoveR.width, btnMoveR.height);
         f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
-        f.font.draw(f.batch, "COMBO: "+combo, 10, SCR_HEIGHT-10);
+        f.font.draw(f.batch, comboString+combo, 10, SCR_HEIGHT-25);
         if(pause){
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
             f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight()/2, Pause.getWidth()+10, Pause.getHeight()+10);

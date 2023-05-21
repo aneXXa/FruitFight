@@ -40,7 +40,7 @@ public class Enemy {
     }
 
     void move(){
-        if (y>GROUND+1){
+        if (y>GROUND){
             y += vy;
         }else{
             x += vx;

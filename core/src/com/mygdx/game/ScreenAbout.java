@@ -33,6 +33,7 @@ public class ScreenAbout implements Screen {
 
     @Override
     public void render(float delta) {
+        //touches
         if(Gdx.input.justTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
@@ -43,11 +44,13 @@ public class ScreenAbout implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             f.setScreen(f.screenMainMenu);
         }
+
+        //graphics
         f.camera.update();
         f.batch.setProjectionMatrix(f.camera.combined);
         f.batch.begin();
         f.batch.draw(bgAbout, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        f.font.draw(f.batch, textAbout, 30, 500);
+        f.font.draw(f.batch, textAbout, 100, 450);
         f.batch.draw(imgBtnClose,btnClose.x, btnClose.y, btnClose.width, btnClose.height);
         f.batch.end();
     }
