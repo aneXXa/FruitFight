@@ -30,7 +30,7 @@ public class ScreenGame implements Screen {
     boolean gameOver;
 
     boolean pause = false;
-    long timeEnemyLastSpawn, timeEnemySpawnInterval = 1000;
+    long timeEnemyLastSpawn, timeEnemySpawnInterval = 2000;
 
     public ScreenGame(FruitFightMain context){
         f = context;
@@ -51,18 +51,6 @@ public class ScreenGame implements Screen {
         for (int i = 0; i < imgPlayer.length; i++) {
             imgPlayer[i] = new Texture("player."+i+".png");
         }
-
-        /*for (int i = 1; i < EnemyFruit.length; i++) {
-            EnemyFruit[i] = new Texture("Enemy.Fruit."+i+".0.png");
-        }
-        for (int i = 1; i < EnemyVeggie.length; i++) {
-            EnemyVeggie[i] = new Texture("Enemy.Veggie."+i+".0.png");
-        }*/
-
-        /*int randomFruit = MathUtils.random(0, EnemyFruit.length - 1);
-        int randomVeggie = MathUtils.random(0, EnemyVeggie.length - 1);
-        Texture randomSpriteFruit = EnemyFruit[randomFruit];
-        Texture randomSpriteVeggie = EnemyVeggie[randomVeggie];*/
 
         btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 90, 90);
         btnMoveL = new ImgButton(imgBtnMoveL, 50, 50, 100, 100);
@@ -110,7 +98,7 @@ public class ScreenGame implements Screen {
                     player.killEnemy();
                     //if ()
                 }
-                if (btnMoveL.hit(f.touch.x, f.touch.y) || btnMoveR.hit(f.touch.x, f.touch.y)) {
+                if (!btnMoveL.hit(f.touch.x, f.touch.y) || !btnMoveR.hit(f.touch.x, f.touch.y)) {
                     player.stay();
                 }
             }

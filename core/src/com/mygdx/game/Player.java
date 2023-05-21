@@ -18,6 +18,7 @@ public class Player {
         height = 212;
         x = SCR_WIDTH/2;
         y = 258;
+
     }
 
     boolean outOfBounds() {
@@ -54,6 +55,7 @@ public class Player {
     }
 
     void stay() {
+        //state=STAY;
         faza = 0;
     }
     void killEnemy(){

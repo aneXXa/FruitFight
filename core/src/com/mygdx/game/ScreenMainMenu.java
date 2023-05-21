@@ -4,14 +4,16 @@ import static com.mygdx.game.FruitFightMain.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class ScreenMainMenu implements Screen {
     FruitFightMain f;
     Texture bgMainMenu;
     Texture imgBtnPlay, imgBtnOptions, imgBtnAbout ,imgBtnQuit;
     Texture logo;
-
     ImgButton btnPlay, btnOptions, btnAbout, btnQuit;
 
     public ScreenMainMenu(FruitFightMain context){
@@ -48,6 +50,9 @@ public class ScreenMainMenu implements Screen {
             }
             if(btnOptions.hit(f.touch.x, f.touch.y)){
                 f.setScreen(f.screenOptions);
+            }
+            if(btnAbout.hit(f.touch.x, f.touch.y)){
+                f.setScreen(f.screenAbout);
             }
         }
 
