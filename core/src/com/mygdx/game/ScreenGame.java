@@ -108,7 +108,7 @@ public class ScreenGame implements Screen {
                     pause = !pause;
                 }
                 if(btnRestart.hit(f.touch.x, f.touch.y)){
-                    //newGame();
+                    newGame();
                 }
             }
             else {
@@ -138,12 +138,12 @@ public class ScreenGame implements Screen {
                 player.chop();
             }
             for (int i = enemies.size()-1; i >= 0 ; i--) {
-                if((player.overlap(enemies.get(i)) && player.isChop) == true && enemies.get(i).type == index){
+                if((player.overlap(enemies.get(i)) && player.isChop) && enemies.get(i).type == index){
                     combo++;
                     condition = GENERATE_WORD;
                     enemies.remove(i);
                     break;
-                } else if((player.overlap(enemies.get(i)) && player.isChop) == true && enemies.get(i).type != index){
+                } else if((player.overlap(enemies.get(i)) && player.isChop) && enemies.get(i).type != index){
                     combo = 0;
                     player.lives--;
                     condition = GENERATE_WORD;
@@ -209,19 +209,19 @@ public class ScreenGame implements Screen {
     @Override
     public void dispose() {
         bgGame.dispose();
-        for (int i = 0; i < imgPlayer.length; i++) {
-            imgPlayer[i].dispose();
+        for (Texture texture : imgPlayer) {
+            texture.dispose();
         }
 
         imgBtnPause.dispose();
         imgBtnMoveL.dispose();
         imgBtnMoveR.dispose();
         imgBtnAttack.dispose();
-        for (int i = 0; i < imgEnemyFruit.length; i++) {
-            imgEnemyFruit[i].dispose();
+        for (Texture texture : imgEnemyFruit) {
+            texture.dispose();
         }
-        for (int i = 0; i < imgEnemyVeggie.length; i++) {
-            imgEnemyVeggie[i].dispose();
+        for (Texture texture : imgEnemyVeggie) {
+            texture.dispose();
         }
     }
 
@@ -232,6 +232,14 @@ public class ScreenGame implements Screen {
         }
     }
 
+    void newGame(){
+        condition = GENERATE_WORD;
+        combo = 0;
+        timeEnemyLastSpawn = TimeUtils.millis();
+        enemies.clear();
+        player.x = SCR_WIDTH/2;
+        pause = !pause;
+    }
     void newRound(){
         index = MathUtils.random.nextInt(words.length);
         currentWord = words[index];
