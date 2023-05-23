@@ -16,7 +16,7 @@ public class ScreenGame implements Screen {
     Texture bgGame, bgPause;
     Texture Pause;
     Texture imgLives;
-    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
+    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart, imgBacktoMenu, imgBtnPlayAgain;
 
     Texture[] imgEnemyFruit = new Texture[8];
     Texture[] imgEnemyVeggie = new Texture[8];
@@ -26,7 +26,7 @@ public class ScreenGame implements Screen {
     String[] words = {"Fruit", "Veggie"};
     String currentWord;
 
-    ImgButton btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
+    ImgButton btnBacktoMenu, btnPlayAgain, btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
 
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
@@ -52,6 +52,8 @@ public class ScreenGame implements Screen {
         imgBtnMoveL = new Texture("btnMoveL.png");
         imgBtnMoveR = new Texture("btnMoveR.png");
         imgBtnAttack = new Texture("btnAttack.png");
+        imgBacktoMenu=new Texture("btnHome.png");
+        imgBtnPlayAgain = new Texture("btnRestart.png");
         imgBtnResume = new Texture("btnResume.png");
         imgBtnHome = new Texture("btnHome.png");
         imgBtnRestart = new Texture("btnRestart.png");
@@ -72,8 +74,10 @@ public class ScreenGame implements Screen {
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
         btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 100, 100);
         btnHome = new ImgButton(imgBtnHome, SCR_WIDTH/2-40, SCR_HEIGHT/2-90, 90, 90);
+        btnBacktoMenu = new ImgButton(imgBtnHome, SCR_WIDTH/2+30, SCR_HEIGHT/2-90, 90, 90);
         btnResume = new ImgButton(imgBtnResume, SCR_WIDTH/2+160, SCR_HEIGHT/2-90, 90, 90);
         btnRestart = new ImgButton(imgBtnRestart, SCR_WIDTH/2-240, SCR_HEIGHT/2-90, 90, 90);
+        btnPlayAgain = new ImgButton(imgBtnRestart, SCR_WIDTH/2-150, SCR_HEIGHT/2-90, 90, 90);
 
         player = new Player();
     }
@@ -89,7 +93,16 @@ public class ScreenGame implements Screen {
         if (Gdx.input.isTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(),0);
             f.camera.unproject(f.touch);
-            if(!pause && !player.isChop) {
+            if (gameOver){
+                if(btnPlayAgain.hit(f.touch.x, f.touch.y)) {
+                    newGame();
+                }
+                if(btnBacktoMenu.hit(f.touch.x, f.touch.y)) {
+                    newGame();
+                    f.setScreen(f.screenMainMenu);
+                }
+            }
+            if(!pause && !player.isChop&&!gameOver) {
                 if (btnMoveL.hit(f.touch.x, f.touch.y)) {
                     player.moveL();
                 }
@@ -101,36 +114,39 @@ public class ScreenGame implements Screen {
         if(Gdx.input.justTouched()){
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
-            if(pause){
-                if(btnHome.hit(f.touch.x, f.touch.y)){
-                    f.setScreen(f.screenMainMenu);
+            if (!gameOver){
+                if(pause){
+                    if(btnHome.hit(f.touch.x, f.touch.y)){
+                        f.setScreen(f.screenMainMenu);
+                    }
+                    if(btnResume.hit(f.touch.x, f.touch.y)){
+                        pause = !pause;
+                    }
+                    if(btnRestart.hit(f.touch.x, f.touch.y)){
+                        newGame();
+                    }
                 }
-                if(btnResume.hit(f.touch.x, f.touch.y)){
-                    pause = !pause;
-                }
-                if(btnRestart.hit(f.touch.x, f.touch.y)){
-                    newGame();
-                }
-            }
-            else {
-                if(btnPause.hit(f.touch.x, f.touch.y)){
-                    pause = !pause;
-                }
-                if(btnAttack.hit(f.touch.x, f.touch.y)){
-                    player.isChop = true;
-                    for (int i = enemies.size()-1; i >= 0 ; i--) {
-                        if((player.overlap(enemies.get(i))) && enemies.get(i).type == index){
-                            combo++;
-                            condition = GENERATE_WORD;
-                            enemies.remove(i);
-                            break;
-                        } else if((player.overlap(enemies.get(i))) && enemies.get(i).type != index){
-                            combo = 0;
-                            player.lives--;
-                            condition = GENERATE_WORD;
-                            System.out.print("lives: " + player.lives);
-                            enemies.remove(i);
-                            break;
+                else {
+                    if(btnPause.hit(f.touch.x, f.touch.y)){
+                        pause = !pause;
+                    }
+                    if(btnAttack.hit(f.touch.x, f.touch.y)){
+                        player.isChop = true;
+                        for (int i = enemies.size()-1; i >= 0 ; i--) {
+                            if((player.overlap(enemies.get(i))) && enemies.get(i).type == index){
+                                combo++;
+                                condition = GENERATE_WORD;
+                                enemies.remove(i);
+                                break;
+                            } else if((player.overlap(enemies.get(i))) && enemies.get(i).type != index){
+                                combo = 0;
+                                player.lives--;
+                                if(player.lives==0){gameOver();}
+                                condition = GENERATE_WORD;
+                                //    System.out.print("lives: " + player.lives);
+                                enemies.remove(i);
+                                break;
+                            }
                         }
                     }
                 }
@@ -142,18 +158,17 @@ public class ScreenGame implements Screen {
         }
 
         // events
-        if(!pause){
-            if(condition == GENERATE_WORD) {
-                newRound();
-            }
-            spawnFruits();
-            for (int i = enemies.size()-1; i >= 0; i--){
-                enemies.get(i).move();
-            }
-            if(player.isChop){
-                player.chop();
-            }
-
+        if(!gameOver&&!pause) {
+                if (condition == GENERATE_WORD) {
+                    newRound();
+                }
+                spawnFruits();
+                for (int i = enemies.size() - 1; i >= 0; i--) {
+                    enemies.get(i).move();
+                }
+                if (player.isChop) {
+                    player.chop();
+                }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             f.setScreen(f.screenMainMenu);
@@ -181,12 +196,18 @@ public class ScreenGame implements Screen {
         for (int i = 1; i < player.lives+1; i++) {
             f.batch.draw(imgLives, (SCR_WIDTH - 1220) * i, SCR_HEIGHT - 150, 55, 55);
         }
-            if(pause){
+        if(pause){
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
             f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight()/2, Pause.getWidth()+10, Pause.getHeight()+10);
             f.batch.draw(imgBtnResume, btnResume.x, btnResume.y, btnResume.width, btnResume.height);
             f.batch.draw(imgBtnHome, btnHome.x, btnHome.y, btnHome.width, btnHome.height);
             f.batch.draw(imgBtnRestart, btnRestart.x, btnRestart.y, btnRestart.width, btnRestart.height);
+        }
+        if(gameOver) {
+            f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
+            f.font.draw(f.batch, "GAME OVER",450,500);
+            f.batch.draw(imgBtnHome, SCR_WIDTH/2+30, SCR_HEIGHT/2-90, btnHome.width, btnHome.height);
+            f.batch.draw(imgBtnPlayAgain, SCR_WIDTH/2-150, btnPlayAgain.y, btnRestart.width, btnRestart.height);
         }
         f.batch.end();
     }
@@ -243,7 +264,9 @@ public class ScreenGame implements Screen {
         timeEnemyLastSpawn = TimeUtils.millis();
         enemies.clear();
         player.x = SCR_WIDTH/2;
-        pause = !pause;
+        gameOver = false;
+        player.lives=3;
+        //pause = !pause;
     }
     void newRound(){
         index = MathUtils.random.nextInt(words.length);
