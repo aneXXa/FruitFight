@@ -49,17 +49,18 @@ public class FruitFightMain extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		font.dispose();
 	}
 	void generateFont(){
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("pixelFont.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 55;
+		parameter.size = 35;
 		parameter.color = new Color(249f/255f, 177f/255f, 69f/255f, 1);
 		parameter.borderColor =  new Color(40f/255f, 17f/255f, 5f/255f, 1);
 		parameter.borderWidth = 3;
 		parameter.characters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";
 		font = generator.generateFont(parameter);
-		parameter.size = 80;
+		parameter.size = 55;
 		fontLarge = generator.generateFont(parameter);
 		generator.dispose();
 	}

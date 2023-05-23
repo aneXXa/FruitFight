@@ -67,10 +67,6 @@ public class Player {
         }
     }
 
-    void stay() {
-        //state=STAY;
-        faza = 0;
-    }
 
     boolean overlap(Enemy enemy){
         /*if(direction == LEFT && x - enemy.x > width/2 && enemy.y<=GROUND) {

@@ -47,6 +47,7 @@ public class ScreenMainMenu implements Screen {
             }
             if(btnPlay.hit(f.touch.x, f.touch.y)){
                 f.setScreen(f.screenGame);
+                //f.screenGame.newGame();
             }
             if(btnOptions.hit(f.touch.x, f.touch.y)){
                 f.setScreen(f.screenOptions);
