@@ -24,8 +24,8 @@ public class ScreenGame implements Screen {
 
     String comboString = "Combo: ";
     String gameOverString = "GAME OVER";
-    String[] words = {"Fruit", "Veggie"};
-    String currentWord;
+    Texture[] words = new Texture[2];
+    Texture currentWord;
 
     ImgButton /*btnBacktoMenu, btnPlayAgain,*/ btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
 
@@ -68,6 +68,9 @@ public class ScreenGame implements Screen {
         }
         for (int i = 0; i < imgEnemyVeggie.length; i++) {
             imgEnemyVeggie[i] = new Texture("Enemy.Veggie."+(i/2+1)+"."+i%2+".png");
+        }
+        for (int i = 0; i < words.length; i++) {
+            words[i] = new Texture("string"+(i+1)+".png");
         }
 
         btnPause = new ImgButton(imgBtnPause, SCR_WIDTH-100, SCR_HEIGHT-100, 90, 90);
@@ -192,10 +195,10 @@ public class ScreenGame implements Screen {
         f.batch.draw(imgBtnMoveL, btnMoveL.x, btnMoveL.y, btnMoveL.width, btnMoveL.height);
         f.batch.draw(imgBtnMoveR, btnMoveR.x, btnMoveR.y, btnMoveR.width, btnMoveR.height);
         f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
-        f.font.draw(f.batch, comboString+combo, SCR_WIDTH/2-90, SCR_HEIGHT-100);
-        f.fontLarge.draw(f.batch, currentWord, SCR_WIDTH/2-95, SCR_HEIGHT-25);
+        f.font.draw(f.batch, comboString+combo, SCR_WIDTH/2-94, SCR_HEIGHT-116);
+        f.batch.draw(currentWord,SCR_WIDTH/2-(currentWord.getWidth()*0.8f)/2, SCR_HEIGHT-currentWord.getHeight(), currentWord.getWidth()*0.8f, currentWord.getHeight()*0.8f);
         for (int i = 1; i < player.lives+1; i++) {
-            f.batch.draw(imgLives, 80*i, SCR_HEIGHT-100, imgLives.getWidth(), imgLives.getHeight());
+            f.batch.draw(imgLives, 70*i, SCR_HEIGHT-100, imgLives.getWidth(), imgLives.getHeight());
         }
         if(pause){
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
@@ -207,8 +210,8 @@ public class ScreenGame implements Screen {
         if(gameOver) {
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
             f.fontLarge.draw(f.batch, gameOverString,SCR_WIDTH/2-150,SCR_HEIGHT/2+100);
-            f.batch.draw(imgBtnHome, btnHome.x, btnHome.y, btnHome.width, btnHome.height);
-            f.batch.draw(imgBtnRestart,btnRestart.x, btnRestart.y, btnRestart.width, btnRestart.height);
+            f.batch.draw(imgBtnHome, btnHome.x+btnHome.width, btnHome.y, btnHome.width, btnHome.height);
+            f.batch.draw(imgBtnRestart,btnRestart.x+btnRestart.width, btnRestart.y, btnRestart.width, btnRestart.height);
         }
         f.batch.end();
     }
@@ -280,7 +283,6 @@ public class ScreenGame implements Screen {
     }
     void gameOver(){
         gameOver = true;
-        pause = !pause;
         player.faza = 0; // сделаю спрайт будет не ноль а "проигрышный" спрайт
     }
 }

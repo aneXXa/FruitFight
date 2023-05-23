@@ -42,14 +42,14 @@ public class Player {
         return y;
     }
     void moveL(){
-        vx = 1.8f;
+        vx = 2.5f;
         x -= vx;
         direction = LEFT;
         faza = 1;
         outOfBounds();
     }
     void moveR(){
-        vx = 1.8f;
+        vx = 2.5f;
         x += vx;
         direction = RIGHT;
         faza = 1;

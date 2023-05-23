@@ -57,7 +57,7 @@ public class FruitFightMain extends Game {
 		parameter.size = 35;
 		parameter.color = new Color(249f/255f, 177f/255f, 69f/255f, 1);
 		parameter.borderColor =  new Color(40f/255f, 17f/255f, 5f/255f, 1);
-		parameter.borderWidth = 3;
+		parameter.borderWidth = 2;
 		parameter.characters = "абвгдеёжзийклмнопрстуфхцчшщъыьэюяabcdefghijklmnopqrstuvwxyzАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\/?-+=()*&.;:,{}\"´`'<>";
 		font = generator.generateFont(parameter);
 		parameter.size = 55;
