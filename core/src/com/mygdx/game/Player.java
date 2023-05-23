@@ -10,7 +10,7 @@ public class Player {
     float vx;
     int lives = 3;
     public static final boolean RIGHT = false, LEFT = true;
-    boolean direction = LEFT;
+    boolean direction;
     int faza;
     //public static final int STAY = 0, GO = 1, CHOP = 2;
     //int state = STAY;
@@ -73,17 +73,14 @@ public class Player {
     }
 
     boolean overlap(Enemy enemy){
-        /*if(direction == LEFT) {
-            return x - enemy.x > width/2 && enemy.y<=GROUND;
-        }
-        if (direction == RIGHT){
-            return enemy.x - x < width/2 && enemy.y<=GROUND;
-        }
-        return false;*/
-
+        /*if(direction == LEFT && x - enemy.x > width/2 && enemy.y<=GROUND) {
+            return true;
+        } else if (direction == RIGHT && enemy.x - x > width/2 && enemy.y<=GROUND){
+            return true;
+        } else {
+            return false;
+        }*/
         return Math.abs(x-enemy.x) < width/2 + enemy.width/4  && enemy.y <= GROUND;
-        // сейчас работает в обе стороны без директиона
-        // оверлеп работает только так, возможно что-то не то с direction
     }
 
 }

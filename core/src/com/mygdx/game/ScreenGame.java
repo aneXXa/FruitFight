@@ -117,6 +117,21 @@ public class ScreenGame implements Screen {
                 }
                 if(btnAttack.hit(f.touch.x, f.touch.y)){
                     player.isChop = true;
+                    for (int i = enemies.size()-1; i >= 0 ; i--) {
+                        if((player.overlap(enemies.get(i))) && enemies.get(i).type == index){
+                            combo++;
+                            condition = GENERATE_WORD;
+                            enemies.remove(i);
+                            break;
+                        } else if((player.overlap(enemies.get(i))) && enemies.get(i).type != index){
+                            combo = 0;
+                            player.lives--;
+                            condition = GENERATE_WORD;
+                            System.out.print("lives: " + player.lives);
+                            enemies.remove(i);
+                            break;
+                        }
+                    }
                 }
             }
             if (!btnMoveL.hit(f.touch.x, f.touch.y) && !btnMoveR.hit(f.touch.x, f.touch.y) &&
@@ -137,21 +152,7 @@ public class ScreenGame implements Screen {
             if(player.isChop){
                 player.chop();
             }
-            for (int i = enemies.size()-1; i >= 0 ; i--) {
-                if((player.overlap(enemies.get(i)) && player.isChop) && enemies.get(i).type == index){
-                    combo++;
-                    condition = GENERATE_WORD;
-                    enemies.remove(i);
-                    break;
-                } else if((player.overlap(enemies.get(i)) && player.isChop) && enemies.get(i).type != index){
-                    combo = 0;
-                    player.lives--;
-                    condition = GENERATE_WORD;
-                    System.out.print("lives: " + player.lives);
-                    enemies.remove(i);
-                    break;
-                }
-            }
+
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             f.setScreen(f.screenMainMenu);
