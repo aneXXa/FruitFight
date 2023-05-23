@@ -15,6 +15,7 @@ public class ScreenGame implements Screen {
     FruitFightMain f;
     Texture bgGame, bgPause;
     Texture Pause;
+    Texture imgLives;
     Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
 
     Texture[] imgEnemyFruit = new Texture[8];
@@ -46,7 +47,7 @@ public class ScreenGame implements Screen {
         bgGame = new Texture("bgIntro.png");
         bgPause = new Texture("pauseScreen.png");
         Pause = new Texture("pause.png");
-
+        imgLives = new Texture("HP.png");
         imgBtnPause = new Texture("btnPause.png");
         imgBtnMoveL = new Texture("btnMoveL.png");
         imgBtnMoveR = new Texture("btnMoveR.png");
@@ -177,7 +178,10 @@ public class ScreenGame implements Screen {
         f.batch.draw(imgBtnAttack, btnAttack.x, btnAttack.y, btnAttack.width, btnAttack.height);
         f.font.draw(f.batch, comboString+combo, 10, SCR_HEIGHT-25);
         f.font.draw(f.batch, currentWord, SCR_WIDTH/2-100, SCR_HEIGHT-25);
-        if(pause){
+        for (int i = 1; i < player.lives+1; i++) {
+            f.batch.draw(imgLives, (SCR_WIDTH - 1220) * i, SCR_HEIGHT - 150, 55, 55);
+        }
+            if(pause){
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
             f.batch.draw(Pause,SCR_WIDTH/2-Pause.getWidth()/2,SCR_HEIGHT/2+Pause.getHeight()/2, Pause.getWidth()+10, Pause.getHeight()+10);
             f.batch.draw(imgBtnResume, btnResume.x, btnResume.y, btnResume.width, btnResume.height);
