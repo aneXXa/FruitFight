@@ -5,6 +5,7 @@ import static com.mygdx.game.FruitFightMain.SCR_WIDTH;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -24,16 +25,18 @@ public class ScreenOptions implements Screen {
         imgBtnClose = new Texture("btnClose.png");
         imgBtnSoundOn = new Texture("btnSoundOn.png");
         imgBtnSoundOff = new Texture("btnSoundOff.png");
-        imgBtnSound = imgBtnSoundOn;
+        if(f.soundOn) imgBtnSound = imgBtnSoundOn;
+        else imgBtnSound = imgBtnSoundOff;
         imgBtnMusicOn = new Texture("btnMusicOn.png");
         imgBtnMusicOff = new Texture("btnMusicOff.png");
-        imgBtnMusic = imgBtnMusicOn;
-
+        if(f.musicOn)imgBtnMusic = imgBtnMusicOn;
+        else imgBtnMusic = imgBtnMusicOff;
         btnClose = new ImgButton(imgBtnClose,SCR_WIDTH-100, SCR_HEIGHT-100, 90, 90);
-        btnSound = new ImgButton(imgBtnSound,SCR_WIDTH/2- 138,
-                SCR_HEIGHT/2+124, 276, 104);
-        btnMusic = new ImgButton(imgBtnMusic,SCR_WIDTH/2- 138,
-                SCR_HEIGHT/2-124, 276, 104);
+        btnSound = new ImgButton(imgBtnSound,SCR_WIDTH/2-138,
+                SCR_HEIGHT/2+78, 276, 104);
+        btnMusic = new ImgButton(imgBtnMusic,SCR_WIDTH/2-138,
+                SCR_HEIGHT/2-78, 276, 104);
+        loadSettings();
     }
 
     @Override
@@ -51,13 +54,13 @@ public class ScreenOptions implements Screen {
                 f.setScreen(f.screenMainMenu);
             }
             if(btnSound.hit(f.touch.x, f.touch.y)){
-                f.screenGame.soundOn = !f.screenGame.soundOn;
-                if(f.screenGame.soundOn) imgBtnSound = imgBtnSoundOn;
+                f.soundOn = !f.soundOn;
+                if(f.soundOn) imgBtnSound = imgBtnSoundOn;
                 else imgBtnSound = imgBtnSoundOff;
             }
             if(btnMusic.hit(f.touch.x, f.touch.y)){
-                f.screenGame.musicOn = !f.screenGame.musicOn;
-                if(f.screenGame.musicOn) imgBtnMusic = imgBtnMusicOn;
+                f.musicOn = !f.musicOn;
+                if(f.musicOn) imgBtnMusic = imgBtnMusicOn;
                 else imgBtnMusic = imgBtnMusicOff;
             }
         }
@@ -94,10 +97,23 @@ public class ScreenOptions implements Screen {
     @Override
     public void hide() {
         Gdx.input.setCatchKey(Input.Keys.BACK, false);
+        saveSettings();
     }
 
     @Override
     public void dispose() {
 
+    }
+    void saveSettings() {
+        Preferences pref = Gdx.app.getPreferences("settings");
+        pref.putBoolean("sound", f.soundOn);
+        pref.putBoolean("music", f.musicOn);
+        pref.flush();
+    }
+
+    void loadSettings() {
+        Preferences pref = Gdx.app.getPreferences("settings");
+        if(pref.contains("sound")) f.soundOn = pref.getBoolean("sound");
+        if(pref.contains("music")) f.musicOn = pref.getBoolean("music");
     }
 }

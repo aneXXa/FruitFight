@@ -34,9 +34,9 @@ public class Enemy {
         width = img.getWidth();
         height = img.getHeight();
         x = MathUtils.random(width*1.6f, SCR_WIDTH-width*1.6f);
-        y = MathUtils.random(SCR_HEIGHT+height/2, SCR_HEIGHT*1.5f);
-        vy = MathUtils.random(-2f, -1f);
-        vx = MathUtils.random(-1.8f, 1.8f);
+        y = SCR_HEIGHT+height+10;
+        vy = MathUtils.random(-3f, -2f);
+        vx = MathUtils.random(-2f, 2f);
     }
 
     void move(){

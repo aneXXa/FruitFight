@@ -4,6 +4,7 @@ import static com.mygdx.game.FruitFightMain.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,38 +12,40 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ScreenGame implements Screen {
     FruitFightMain f;
     Texture bgGame, bgPause;
     Texture Pause;
     Texture imgLives;
-    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart/*, imgBacktoMenu, imgBtnPlayAgain*/;
+    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart;
+    Texture gameOverString;
 
     Texture[] imgEnemyFruit = new Texture[8];
     Texture[] imgEnemyVeggie = new Texture[8];
     Texture[] imgPlayer = new Texture[5];
 
-    String comboString = "Combo: ";
-    String gameOverString = "GAME OVER";
+    String comboString = "Combo: ",
+            highestComboString = "Highest combo: ";
     Texture[] words = new Texture[2];
     Texture currentWord;
 
     Sound whooshSound;
 
-    ImgButton /*btnBacktoMenu, btnPlayAgain,*/ btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
+    ImgButton btnHome2, btnRestart2, btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
 
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
 
-    int combo = 0;
+    int combo = 0, highestCombo;
     int index;
     public static final int GENERATE_WORD = 0,PLAY_GAME = 1;
     int condition = GENERATE_WORD;
 
     boolean pause = false;
     boolean gameOver;
-    boolean soundOn = true, musicOn = true;
+
     long timeEnemyLastSpawn, timeEnemySpawnInterval = 2000;
 
     public ScreenGame(FruitFightMain context){
@@ -56,11 +59,10 @@ public class ScreenGame implements Screen {
         imgBtnMoveL = new Texture("btnMoveL.png");
         imgBtnMoveR = new Texture("btnMoveR.png");
         imgBtnAttack = new Texture("btnAttack.png");
-        //imgBacktoMenu=new Texture("btnHome.png");
-        //imgBtnPlayAgain = new Texture("btnRestart.png");
         imgBtnResume = new Texture("btnResume.png");
         imgBtnHome = new Texture("btnHome.png");
         imgBtnRestart = new Texture("btnRestart.png");
+        gameOverString = new Texture("gameOver.png");
 
         whooshSound = Gdx.audio.newSound(Gdx.files.internal("Whoosh.mp3"));
 
@@ -83,12 +85,13 @@ public class ScreenGame implements Screen {
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
         btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 100, 100);
         btnHome = new ImgButton(imgBtnHome, SCR_WIDTH/2-40, SCR_HEIGHT/2-90, 90, 90);
-        //btnBacktoMenu = new ImgButton(imgBtnHome, SCR_WIDTH/2+30, SCR_HEIGHT/2-90, 90, 90);
+        btnHome2 = new ImgButton(imgBtnHome, SCR_WIDTH/2+50, SCR_HEIGHT/2-90, 90, 90);
         btnResume = new ImgButton(imgBtnResume, SCR_WIDTH/2+160, SCR_HEIGHT/2-90, 90, 90);
         btnRestart = new ImgButton(imgBtnRestart, SCR_WIDTH/2-240, SCR_HEIGHT/2-90, 90, 90);
-        //btnPlayAgain = new ImgButton(imgBtnRestart, SCR_WIDTH/2-40, SCR_HEIGHT/2-90, 90, 90);
+        btnRestart2 = new ImgButton(imgBtnRestart, SCR_WIDTH/2-150, SCR_HEIGHT/2-90, 90, 90);
 
         player = new Player();
+        loadHighestCombo();
     }
 
     @Override
@@ -115,10 +118,10 @@ public class ScreenGame implements Screen {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
             if (gameOver){
-                if(btnRestart.hit(f.touch.x, f.touch.y)) {
+                if(btnRestart2.hit(f.touch.x, f.touch.y)) {
                     newGame();
                 }
-                if(btnHome.hit(f.touch.x, f.touch.y)) {
+                if(btnHome2.hit(f.touch.x, f.touch.y)) {
                     f.setScreen(f.screenMainMenu);
                 }
             }
@@ -140,7 +143,7 @@ public class ScreenGame implements Screen {
                     }
                     if(btnAttack.hit(f.touch.x, f.touch.y)){
                         player.isChop = true;
-                        if (soundOn) whooshSound.play();
+                        if (f.soundOn) whooshSound.play();
                         for (int i = enemies.size()-1; i >= 0 ; i--) {
                             if((player.overlap(enemies.get(i))) && enemies.get(i).type == index){
                                 combo++;
@@ -148,6 +151,9 @@ public class ScreenGame implements Screen {
                                 enemies.remove(i);
                                 break;
                             } else if((player.overlap(enemies.get(i))) && enemies.get(i).type != index){
+                                if (highestCombo < combo){
+                                    highestCombo = combo;
+                                }
                                 combo = 0;
                                 player.lives--;
                                 condition = GENERATE_WORD;
@@ -215,9 +221,10 @@ public class ScreenGame implements Screen {
         }
         if(gameOver) {
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-            f.fontLarge.draw(f.batch, gameOverString,SCR_WIDTH/2-150,SCR_HEIGHT/2+100);
-            f.batch.draw(imgBtnHome, btnHome.x+btnHome.width, btnHome.y, btnHome.width, btnHome.height);
-            f.batch.draw(imgBtnRestart,btnRestart.x+btnRestart.width, btnRestart.y, btnRestart.width, btnRestart.height);
+            f.batch.draw(gameOverString,SCR_WIDTH/2-(gameOverString.getWidth()*1.2f)/2,SCR_HEIGHT/2+gameOverString.getHeight()*1.2f,gameOverString.getWidth()*1.2f,gameOverString.getHeight()*1.2f);
+            f.font.draw(f.batch, "Highest combo: "+highestCombo, SCR_WIDTH/2-200, SCR_HEIGHT/2+50);
+            f.batch.draw(imgBtnHome, btnHome2.x, btnHome2.y, btnHome2.width, btnHome2.height);
+            f.batch.draw(imgBtnRestart,btnRestart2.x, btnRestart2.y, btnRestart2.width, btnRestart2.height);
         }
         f.batch.end();
     }
@@ -240,6 +247,7 @@ public class ScreenGame implements Screen {
     @Override
     public void hide() {
         Gdx.input.setCatchKey(Input.Keys.BACK, false);
+        saveHighestCombo();
     }
 
     @Override
@@ -273,12 +281,11 @@ public class ScreenGame implements Screen {
 
     void newGame(){
         gameOver = false;
-        pause = !pause;
         condition = GENERATE_WORD;
         enemies.clear();
         timeEnemyLastSpawn = TimeUtils.millis();
         player.x = SCR_WIDTH/2;
-        player.lives=3;
+        player.lives = 3;
         combo = 0;
         player.faza = 0;
     }
@@ -290,5 +297,14 @@ public class ScreenGame implements Screen {
     void gameOver(){
         gameOver = true;
         player.faza = 0; // сделаю спрайт будет не ноль а "проигрышный" спрайт
+    }
+    void saveHighestCombo(){
+        Preferences pref = Gdx.app.getPreferences("highestCombo");
+        pref.putInteger("combo", highestCombo);
+        pref.flush();
+    }
+    void loadHighestCombo(){
+        Preferences pref = Gdx.app.getPreferences("highestCombo");
+        if(pref.contains("combo")) highestCombo = pref.getInteger("combo");
     }
 }

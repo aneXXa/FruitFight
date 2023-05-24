@@ -25,7 +25,7 @@ public class FruitFightMain extends Game {
 	ScreenOptions screenOptions;
 	ScreenAbout screenAbout;
 	BitmapFont font, fontLarge;
-
+	boolean soundOn = true, musicOn = true;
 	
 	@Override
 	public void create () {
