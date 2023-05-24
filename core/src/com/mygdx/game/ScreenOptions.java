@@ -102,7 +102,12 @@ public class ScreenOptions implements Screen {
 
     @Override
     public void dispose() {
-
+        bgOptions.dispose();
+        imgBtnClose.dispose();
+        imgBtnSoundOn.dispose();
+        imgBtnSoundOff.dispose();
+        imgBtnMusicOn.dispose();
+        imgBtnMusicOff.dispose();
     }
     void saveSettings() {
         Preferences pref = Gdx.app.getPreferences("settings");

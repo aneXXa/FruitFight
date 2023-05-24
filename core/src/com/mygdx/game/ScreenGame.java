@@ -263,6 +263,9 @@ public class ScreenGame implements Screen {
         for (Texture texture : imgEnemyVeggie) {
             texture.dispose();
         }
+        for (Texture texture : words){
+            texture.dispose();
+        }
         imgBtnPause.dispose();
         imgBtnMoveL.dispose();
         imgBtnMoveR.dispose();
@@ -271,6 +274,10 @@ public class ScreenGame implements Screen {
         imgBtnHome.dispose();
         imgBtnResume.dispose();
         bgPause.dispose();
+        Pause.dispose();
+        imgLives.dispose();
+        gameOverString.dispose();
+        whooshSound.dispose();
     }
 
     void spawnFruits() {
