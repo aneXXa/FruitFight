@@ -16,7 +16,7 @@ public class ScreenGame implements Screen {
     Texture bgGame, bgPause;
     Texture Pause;
     Texture imgLives;
-    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart/*, imgBacktoMenu, imgBtnPlayAgain*/;
+    Texture imgBtnPause, imgBtnMoveL, imgBtnMoveR, imgBtnAttack, imgBtnResume, imgBtnHome, imgBtnRestart, imgBacktoMenu, imgBtnPlayAgain;
 
     Texture[] imgEnemyFruit = new Texture[8];
     Texture[] imgEnemyVeggie = new Texture[8];
@@ -27,7 +27,7 @@ public class ScreenGame implements Screen {
     Texture[] words = new Texture[2];
     Texture currentWord;
 
-    ImgButton /*btnBacktoMenu, btnPlayAgain,*/ btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
+    ImgButton btnBacktoMenu, btnPlayAgain, btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
 
     ArrayList<Enemy> enemies = new ArrayList<>();
     Player player;
@@ -53,8 +53,8 @@ public class ScreenGame implements Screen {
         imgBtnMoveL = new Texture("btnMoveL.png");
         imgBtnMoveR = new Texture("btnMoveR.png");
         imgBtnAttack = new Texture("btnAttack.png");
-        //imgBacktoMenu=new Texture("btnHome.png");
-        //imgBtnPlayAgain = new Texture("btnRestart.png");
+        imgBacktoMenu=new Texture("btnHome.png");
+        imgBtnPlayAgain = new Texture("btnRestart.png");
         imgBtnResume = new Texture("btnResume.png");
         imgBtnHome = new Texture("btnHome.png");
         imgBtnRestart = new Texture("btnRestart.png");
@@ -78,10 +78,10 @@ public class ScreenGame implements Screen {
         btnMoveR = new ImgButton(imgBtnMoveR, 225, 50, 100, 100);
         btnAttack = new ImgButton(imgBtnAttack, SCR_WIDTH-200, 50, 100, 100);
         btnHome = new ImgButton(imgBtnHome, SCR_WIDTH/2-40, SCR_HEIGHT/2-90, 90, 90);
-        //btnBacktoMenu = new ImgButton(imgBtnHome, SCR_WIDTH/2+30, SCR_HEIGHT/2-90, 90, 90);
+        btnBacktoMenu = new ImgButton(imgBtnHome, SCR_WIDTH/2+30, SCR_HEIGHT/2-90, 90, 90);
         btnResume = new ImgButton(imgBtnResume, SCR_WIDTH/2+160, SCR_HEIGHT/2-90, 90, 90);
         btnRestart = new ImgButton(imgBtnRestart, SCR_WIDTH/2-240, SCR_HEIGHT/2-90, 90, 90);
-        //btnPlayAgain = new ImgButton(imgBtnRestart, SCR_WIDTH/2-40, SCR_HEIGHT/2-90, 90, 90);
+        btnPlayAgain = new ImgButton(imgBtnRestart, SCR_WIDTH/2-150, SCR_HEIGHT/2-90, 90, 90);
 
         player = new Player();
     }
@@ -98,10 +98,11 @@ public class ScreenGame implements Screen {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(),0);
             f.camera.unproject(f.touch);
             if (gameOver){
-                if(btnRestart.hit(f.touch.x, f.touch.y)) {
+                if(btnPlayAgain.hit(f.touch.x, f.touch.y)) {
                     newGame();
                 }
-                if(btnHome.hit(f.touch.x, f.touch.y)) {
+                if(btnBacktoMenu.hit(f.touch.x, f.touch.y)) {
+                    newGame();
                     f.setScreen(f.screenMainMenu);
                 }
             }
@@ -126,6 +127,7 @@ public class ScreenGame implements Screen {
                         pause = !pause;
                     }
                     if(btnRestart.hit(f.touch.x, f.touch.y)){
+                        pause = !pause;
                         newGame();
                     }
                 }
@@ -209,9 +211,9 @@ public class ScreenGame implements Screen {
         }
         if(gameOver) {
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-            f.fontLarge.draw(f.batch, gameOverString,SCR_WIDTH/2-150,SCR_HEIGHT/2+100);
-            f.batch.draw(imgBtnHome, btnHome.x+btnHome.width, btnHome.y, btnHome.width, btnHome.height);
-            f.batch.draw(imgBtnRestart,btnRestart.x+btnRestart.width, btnRestart.y, btnRestart.width, btnRestart.height);
+            f.fontLarge.draw(f.batch, gameOverString,450,500);
+            f.batch.draw(imgBacktoMenu, SCR_WIDTH/2+30, SCR_HEIGHT/2-90, btnHome.width, btnHome.height);
+            f.batch.draw(imgBtnPlayAgain,SCR_WIDTH/2-150, btnPlayAgain.y, btnRestart.width, btnRestart.height);
         }
         f.batch.end();
     }
@@ -267,7 +269,6 @@ public class ScreenGame implements Screen {
 
     void newGame(){
         gameOver = false;
-        pause = !pause;
         condition = GENERATE_WORD;
         enemies.clear();
         timeEnemyLastSpawn = TimeUtils.millis();
