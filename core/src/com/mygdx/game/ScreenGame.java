@@ -105,7 +105,7 @@ public class ScreenGame implements Screen {
         if (Gdx.input.isTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(),0);
             f.camera.unproject(f.touch);
-            if(!pause && !player.isChop &&!gameOver) {
+            if(!pause && !player.isChop && !gameOver) {
                 if (btnMoveL.hit(f.touch.x, f.touch.y)) {
                     player.moveL();
                 }
@@ -134,6 +134,7 @@ public class ScreenGame implements Screen {
                         pause = !pause;
                     }
                     if(btnRestart.hit(f.touch.x, f.touch.y)){
+                        pause = !pause;
                         newGame();
                     }
                 }
@@ -222,7 +223,7 @@ public class ScreenGame implements Screen {
         if(gameOver) {
             f.batch.draw(bgPause, 0, 0, SCR_WIDTH, SCR_HEIGHT);
             f.batch.draw(gameOverString,SCR_WIDTH/2-(gameOverString.getWidth()*1.2f)/2,SCR_HEIGHT/2+gameOverString.getHeight()*1.2f,gameOverString.getWidth()*1.2f,gameOverString.getHeight()*1.2f);
-            f.font.draw(f.batch, "Highest combo: "+highestCombo, SCR_WIDTH/2-200, SCR_HEIGHT/2+50);
+            f.font.draw(f.batch, "Highest combo: "+highestCombo, SCR_WIDTH/2-188, SCR_HEIGHT/2+50);
             f.batch.draw(imgBtnHome, btnHome2.x, btnHome2.y, btnHome2.width, btnHome2.height);
             f.batch.draw(imgBtnRestart,btnRestart2.x, btnRestart2.y, btnRestart2.width, btnRestart2.height);
         }

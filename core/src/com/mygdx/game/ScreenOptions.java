@@ -21,6 +21,7 @@ public class ScreenOptions implements Screen {
 
     public ScreenOptions(FruitFightMain context){
         f = context;
+        loadSettings();
         bgOptions = new Texture("bgIntro.png");
         imgBtnClose = new Texture("btnClose.png");
         imgBtnSoundOn = new Texture("btnSoundOn.png");
@@ -36,7 +37,6 @@ public class ScreenOptions implements Screen {
                 SCR_HEIGHT/2+78, 276, 104);
         btnMusic = new ImgButton(imgBtnMusic,SCR_WIDTH/2-138,
                 SCR_HEIGHT/2-78, 276, 104);
-        loadSettings();
     }
 
     @Override
