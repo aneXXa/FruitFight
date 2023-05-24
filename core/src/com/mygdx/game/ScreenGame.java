@@ -296,7 +296,7 @@ public class ScreenGame implements Screen {
     }
     void gameOver(){
         gameOver = true;
-        player.faza = 0; // сделаю спрайт будет не ноль а "проигрышный" спрайт
+        player.faza = 0; //  сделаю спрайт будет не ноль а "проигрышный" спрайт
     }
     void saveHighestCombo(){
         Preferences pref = Gdx.app.getPreferences("highestCombo");
