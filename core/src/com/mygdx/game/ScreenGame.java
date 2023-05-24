@@ -5,6 +5,7 @@ import static com.mygdx.game.FruitFightMain.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -27,6 +28,8 @@ public class ScreenGame implements Screen {
     Texture[] words = new Texture[2];
     Texture currentWord;
 
+    Sound whooshSound;
+
     ImgButton /*btnBacktoMenu, btnPlayAgain,*/ btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
 
     ArrayList<Enemy> enemies = new ArrayList<>();
@@ -39,7 +42,7 @@ public class ScreenGame implements Screen {
 
     boolean pause = false;
     boolean gameOver;
-
+    boolean soundOn = true, musicOn = true;
     long timeEnemyLastSpawn, timeEnemySpawnInterval = 2000;
 
     public ScreenGame(FruitFightMain context){
@@ -58,6 +61,8 @@ public class ScreenGame implements Screen {
         imgBtnResume = new Texture("btnResume.png");
         imgBtnHome = new Texture("btnHome.png");
         imgBtnRestart = new Texture("btnRestart.png");
+
+        whooshSound = Gdx.audio.newSound(Gdx.files.internal("Whoosh.mp3"));
 
         for (int i = 0; i < imgPlayer.length; i++) {
             imgPlayer[i] = new Texture("player."+i+".png");
@@ -97,14 +102,6 @@ public class ScreenGame implements Screen {
         if (Gdx.input.isTouched()) {
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(),0);
             f.camera.unproject(f.touch);
-            if (gameOver){
-                if(btnRestart.hit(f.touch.x, f.touch.y)) {
-                    newGame();
-                }
-                if(btnHome.hit(f.touch.x, f.touch.y)) {
-                    f.setScreen(f.screenMainMenu);
-                }
-            }
             if(!pause && !player.isChop &&!gameOver) {
                 if (btnMoveL.hit(f.touch.x, f.touch.y)) {
                     player.moveL();
@@ -117,6 +114,14 @@ public class ScreenGame implements Screen {
         if(Gdx.input.justTouched()){
             f.touch.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             f.camera.unproject(f.touch);
+            if (gameOver){
+                if(btnRestart.hit(f.touch.x, f.touch.y)) {
+                    newGame();
+                }
+                if(btnHome.hit(f.touch.x, f.touch.y)) {
+                    f.setScreen(f.screenMainMenu);
+                }
+            }
             if (!gameOver){
                 if(pause){
                     if(btnHome.hit(f.touch.x, f.touch.y)){
@@ -135,6 +140,7 @@ public class ScreenGame implements Screen {
                     }
                     if(btnAttack.hit(f.touch.x, f.touch.y)){
                         player.isChop = true;
+                        if (soundOn) whooshSound.play();
                         for (int i = enemies.size()-1; i >= 0 ; i--) {
                             if((player.overlap(enemies.get(i))) && enemies.get(i).type == index){
                                 combo++;
