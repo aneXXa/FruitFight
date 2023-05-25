@@ -51,7 +51,7 @@ public class ScreenGame implements Screen {
     public ScreenGame(FruitFightMain context){
         f = context;
 
-        bgGame = new Texture("bgIntro.png");
+        bgGame = new Texture("bgGame.png");
         bgPause = new Texture("pauseScreen.png");
         Pause = new Texture("pause.png");
         imgLives = new Texture("HP.png");
@@ -122,6 +122,7 @@ public class ScreenGame implements Screen {
                     newGame();
                 }
                 if(btnHome2.hit(f.touch.x, f.touch.y)) {
+                    newGame();
                     f.setScreen(f.screenMainMenu);
                 }
             }
@@ -180,12 +181,8 @@ public class ScreenGame implements Screen {
                 for (int i = enemies.size() - 1; i >= 0; i--) {
                     enemies.get(i).move();
                 }
-                if (player.isChop) {
-                    player.chop();
-                }
-                if(player.lives == 0){
-                    gameOver();
-                }
+                if (player.isChop) player.chop();
+                if (player.lives == 0) gameOver();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             f.setScreen(f.screenMainMenu);
@@ -295,6 +292,7 @@ public class ScreenGame implements Screen {
         player.x = SCR_WIDTH/2;
         player.lives = 3;
         combo = 0;
+        player.isChop = false;
         player.faza = 0;
     }
     void newRound(){
@@ -304,7 +302,7 @@ public class ScreenGame implements Screen {
     }
     void gameOver(){
         gameOver = true;
-        player.faza = 0; //  сделаю спрайт будет не ноль а "проигрышный" спрайт
+        player.faza = 0;
     }
     void saveHighestCombo(){
         Preferences pref = Gdx.app.getPreferences("highestCombo");

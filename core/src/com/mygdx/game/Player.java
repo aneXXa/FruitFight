@@ -12,8 +12,6 @@ public class Player {
     public static final boolean RIGHT = false, LEFT = true;
     boolean direction;
     int faza;
-    //public static final int STAY = 0, GO = 1, CHOP = 2;
-    //int state = STAY;
     boolean isChop;
     long timeNewFaza, timeFazaInterval = 100;
 
@@ -66,7 +64,6 @@ public class Player {
             timeNewFaza = TimeUtils.millis();
         }
     }
-
 
     boolean overlap(Enemy enemy){
         /*if(direction == LEFT && x - enemy.x > width/2 && enemy.y<=GROUND) {
