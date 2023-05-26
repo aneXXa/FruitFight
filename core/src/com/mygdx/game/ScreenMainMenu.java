@@ -4,6 +4,7 @@ import static com.mygdx.game.FruitFightMain.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -15,6 +16,7 @@ public class ScreenMainMenu implements Screen {
     Texture imgBtnPlay, imgBtnOptions, imgBtnAbout ,imgBtnQuit;
     Texture logo;
     ImgButton btnPlay, btnOptions, btnAbout, btnQuit;
+    Music bginmusic;
 
     public ScreenMainMenu(FruitFightMain context){
         f = context;
@@ -29,11 +31,15 @@ public class ScreenMainMenu implements Screen {
         btnOptions = new ImgButton(imgBtnOptions, 836, 388, 372, 104);
         btnAbout = new ImgButton(imgBtnAbout, 884, 260, 276, 104);
         btnQuit = new ImgButton(imgBtnQuit, 908, 132, 228, 104);
+        bginmusic = Gdx.audio.newMusic(Gdx.files.internal("sndmenu.mp3"));
     }
 
     @Override
     public void show() {
-
+         // установка позиции на начало
+        if(f.musicOn) {bginmusic.play();
+            bginmusic.setPosition(0);
+        }
     }
 
     @Override
@@ -87,7 +93,7 @@ public class ScreenMainMenu implements Screen {
 
     @Override
     public void hide() {
-
+        bginmusic.stop();
     }
 
     @Override
@@ -98,5 +104,6 @@ public class ScreenMainMenu implements Screen {
         imgBtnOptions.dispose();
         imgBtnAbout.dispose();
         imgBtnQuit.dispose();
+        bginmusic.dispose();
     }
 }

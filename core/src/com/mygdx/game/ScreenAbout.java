@@ -13,10 +13,15 @@ public class ScreenAbout implements Screen {
     Texture bgAbout;
     Texture imgBtnClose;
     ImgButton btnClose;
-    String textAbout = "Убивай плоды ты тут,\n" +
-            "и всё будет вэри гуд)\n" +
-            "\n" +
-            "\n\n";
+    String rules =  "Правила:\n\n";
+    String textAbout = "В этой игре вы будете играть\n" +
+            "за повора, которому\n" +
+            "нужно нарезать оживших\n"+
+            "фруктов и овощей.\n"+
+            "Сверху будет показано,\n"+
+            "кто ему нужен в данный момент,\n"+
+            "старайтесь не ошибаться\n"+
+            "и занимайтесь весёлой нарезкой.\n\n";
 
 
     public ScreenAbout(FruitFightMain context){
@@ -50,7 +55,8 @@ public class ScreenAbout implements Screen {
         f.batch.setProjectionMatrix(f.camera.combined);
         f.batch.begin();
         f.batch.draw(bgAbout, 0, 0, SCR_WIDTH, SCR_HEIGHT);
-        f.fontLarge.draw(f.batch, textAbout, 100, 450);
+        f.fontLarge.draw(f.batch, rules, 500, 600);
+        f.font.draw(f.batch, textAbout, 300, 500);
         f.batch.draw(imgBtnClose,btnClose.x, btnClose.y, btnClose.width, btnClose.height);
         f.batch.end();
     }

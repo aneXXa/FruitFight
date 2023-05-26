@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -32,6 +33,7 @@ public class ScreenGame implements Screen {
     Texture currentWord;
 
     Sound whooshSound;
+    Music bgmusic;
 
     ImgButton btnHome2, btnRestart2, btnPause, btnMoveL, btnMoveR, btnAttack, btnResume, btnHome, btnRestart;
 
@@ -65,6 +67,7 @@ public class ScreenGame implements Screen {
         gameOverString = new Texture("gameOver.png");
 
         whooshSound = Gdx.audio.newSound(Gdx.files.internal("Whoosh.mp3"));
+        bgmusic = Gdx.audio.newMusic(Gdx.files.internal("sndgame.mp3"));
 
         for (int i = 0; i < imgPlayer.length; i++) {
             imgPlayer[i] = new Texture("player."+i+".png");
@@ -97,6 +100,9 @@ public class ScreenGame implements Screen {
     @Override
     public void show() {
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
+        bgmusic.setPosition(0); // установка позиции на начало
+        bgmusic.setVolume(1/2f);
+        if(f.musicOn) bgmusic.play();
     }
 
     @Override
@@ -174,7 +180,7 @@ public class ScreenGame implements Screen {
 
         // events
         if(!gameOver && !pause) {
-                if (condition == GENERATE_WORD) {
+            if (condition == GENERATE_WORD) {
                     newRound();
                 }
                 spawnFruits();
@@ -246,6 +252,7 @@ public class ScreenGame implements Screen {
     public void hide() {
         Gdx.input.setCatchKey(Input.Keys.BACK, false);
         saveHighestCombo();
+        bgmusic.stop();
     }
 
     @Override
@@ -275,6 +282,7 @@ public class ScreenGame implements Screen {
         imgLives.dispose();
         gameOverString.dispose();
         whooshSound.dispose();
+        bgmusic.dispose();
     }
 
     void spawnFruits() {
@@ -286,6 +294,7 @@ public class ScreenGame implements Screen {
 
     void newGame(){
         gameOver = false;
+        bgmusic.setPosition(0);
         condition = GENERATE_WORD;
         enemies.clear();
         timeEnemyLastSpawn = TimeUtils.millis();
@@ -302,6 +311,7 @@ public class ScreenGame implements Screen {
     }
     void gameOver(){
         gameOver = true;
+
         player.faza = 0;
     }
     void saveHighestCombo(){
